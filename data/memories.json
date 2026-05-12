@@ -1,0 +1,104 @@
+{
+  "memories": [
+    {
+      "id": "memory-001",
+      "date": "2024-07-10",
+      "title": "选择开始",
+      "description": "面对一切都不确定的未来，我们还是选择开始。",
+      "chapter": "uncertain-beginning",
+      "type": "conversation",
+      "importance": "high",
+      "relatedPhotos": []
+    },
+    {
+      "id": "memory-002",
+      "date": "2024-09-15",
+      "title": "深夜对话",
+      "description": "在无数次对话、争吵、沉默中，未来渐渐清晰。",
+      "chapter": "growing-clear",
+      "type": "conflict",
+      "importance": "high",
+      "relatedPhotos": ["growing-clear-01", "growing-clear-02"]
+    },
+    {
+      "id": "memory-003",
+      "date": "2024-11-08",
+      "title": "变得坚定",
+      "description": "不是没有摇晃，而是摇晃之后仍然向彼此靠近。",
+      "chapter": "growing-clear",
+      "type": "milestone",
+      "importance": "high",
+      "relatedPhotos": []
+    },
+    {
+      "id": "memory-004",
+      "date": "2025-01-01",
+      "title": "金陵转折",
+      "description": "金陵城，或许算是一个转折点。",
+      "chapter": "nanjing",
+      "type": "city",
+      "importance": "high",
+      "relatedPhotos": ["nanjing-night-01", "nanjing-snow-01", "nanjing-street-01"]
+    },
+    {
+      "id": "memory-005",
+      "date": "2025-02-14",
+      "title": "我们官宣啦",
+      "description": "把喜欢告诉世界，也把认真告诉彼此。",
+      "chapter": "announcement",
+      "type": "announcement",
+      "importance": "high",
+      "relatedPhotos": ["announce-01", "announce-02"]
+    },
+    {
+      "id": "memory-006",
+      "date": "2025-04-12",
+      "title": "一起生活",
+      "description": "在一起的每一天都是礼物。",
+      "chapter": "good-times-1",
+      "type": "moment",
+      "importance": "medium",
+      "relatedPhotos": ["good1-cook-01"]
+    },
+    {
+      "id": "memory-007",
+      "date": "2025-05-20",
+      "title": "猝不及防",
+      "description": "猝不及防的意外，但还是选择坚定走下去。",
+      "chapter": "unexpected-challenge",
+      "type": "conflict",
+      "importance": "high",
+      "relatedPhotos": []
+    },
+    {
+      "id": "memory-008",
+      "date": "2025-07-05",
+      "title": "雨后晴天",
+      "description": "走过风雨后的晴天，格外珍贵。",
+      "chapter": "good-times-2",
+      "type": "city",
+      "importance": "high",
+      "relatedPhotos": ["good2-trip-01", "good2-sunset-01"]
+    },
+    {
+      "id": "memory-009",
+      "date": "2025-08-15",
+      "title": "更珍惜",
+      "description": "后来那些明亮的日子，都像被认真收藏起来。",
+      "chapter": "good-times-2",
+      "type": "moment",
+      "importance": "medium",
+      "relatedPhotos": ["good2-sunset-01"]
+    },
+    {
+      "id": "memory-010",
+      "date": "2025-09-20",
+      "title": "600 天",
+      "description": "600 天，此刻即是最好的时光。",
+      "chapter": "now",
+      "type": "milestone",
+      "importance": "high",
+      "relatedPhotos": ["now-us-01", "now-stats-01"]
+    }
+  ]
+}

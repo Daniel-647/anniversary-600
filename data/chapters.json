@@ -1,0 +1,190 @@
+{
+  "chapters": [
+    {
+      "id": "uncertain-beginning",
+      "order": 1,
+      "title": "开始",
+      "subtitle": "面对一切都不确定的未来，我们选择开始",
+      "description": "那时候没有答案，也没有把握。可我们还是把手伸向彼此，让故事有了第一页。",
+      "theme": "cold",
+      "background": "",
+      "startText": "一切都还很轻，很慢，也很不确定。",
+      "endText": "但开始本身，就已经很勇敢。",
+      "motionStyle": "slow-blur-reveal",
+      "colorPalette": {
+        "primary": "var(--cold-blue)",
+        "accent": "var(--cold-blue-light)",
+        "text": "var(--cinema-white-dim)"
+      },
+      "hasPhotos": false,
+      "chatBubbles": [
+        { "type": "received", "text": "如果未来还是看不清呢？" },
+        { "type": "sent", "text": "那就先一起走一段，慢慢看清。" },
+        { "type": "received", "text": "会不会很难？" },
+        { "type": "sent", "text": "会。但我想和你试试。" }
+      ],
+      "floatingWords": ["不确定", "靠近", "试一试", "开始"]
+    },
+    {
+      "id": "growing-clear",
+      "order": 2,
+      "title": "坚定",
+      "subtitle": "在无数次对话、争吵、沉默中，未来渐渐清晰",
+      "description": "我们并不是一直顺利。可正是那些深夜的解释、沉默后的拥抱、再次选择彼此的瞬间，让未来变得越来越清楚。",
+      "theme": "dark",
+      "background": "",
+      "startText": "有些清晰，是从裂缝里长出来的。",
+      "endText": "后来我们懂得，坚定不是没有争吵，而是争吵之后还愿意靠近。",
+      "motionStyle": "fracture-reveal",
+      "colorPalette": {
+        "primary": "var(--void-light)",
+        "accent": "var(--cinema-gray)",
+        "text": "var(--cinema-white-dim)"
+      },
+      "hasPhotos": true,
+      "struggleLines": [
+        "我们都曾有过不安。",
+        "也曾因为一句话，把彼此推远。",
+        "但每一次认真沟通，都让心里的答案更清楚。",
+        "未来不是突然确定的。",
+        "是我们在一次次选择里，把它慢慢照亮。"
+      ],
+      "transitionText": "于是，雾散了一点，路也亮了一点。"
+    },
+    {
+      "id": "nanjing",
+      "order": 3,
+      "title": "金陵",
+      "subtitle": "金陵城，或许算是一个转折点",
+      "description": "那座城市有夜色、暖灯、风和冬天。我们在那里留下的脚步，像一段电影里刚好亮起的长镜头。",
+      "theme": "warm",
+      "background": "",
+      "startText": "走在金陵的街上，很多话都不用说出口。",
+      "endText": "有些城市，会替人记住心动。",
+      "motionStyle": "warm-glow-reveal",
+      "colorPalette": {
+        "primary": "var(--warm-gold)",
+        "accent": "var(--warm-gold-light)",
+        "text": "var(--cinema-white)"
+      },
+      "hasPhotos": true,
+      "quote": "金陵城的夜色很温柔，而你站在光里，让这一切都有了意义。",
+      "timelineNodes": [
+        { "label": "夜色", "position": 15 },
+        { "label": "街巷", "position": 30 },
+        { "label": "冬风", "position": 47 },
+        { "label": "并肩", "position": 64 },
+        { "label": "转折", "position": 78 },
+        { "label": "记住", "position": 92 }
+      ],
+      "hasSnow": true
+    },
+    {
+      "id": "announcement",
+      "order": 4,
+      "title": "官宣",
+      "subtitle": "我们官宣啦",
+      "description": "把喜欢告诉世界，是一件很小也很大的事。那一刻，我们终于不只是彼此心里的秘密。",
+      "theme": "golden",
+      "background": "",
+      "startText": "光变得更亮，心也更确定。",
+      "endText": "从这一天起，我们拥有了一个共同的名字。",
+      "motionStyle": "bloom-glow-reveal",
+      "colorPalette": {
+        "primary": "var(--warm-gold)",
+        "accent": "var(--rose-gold-light)",
+        "text": "var(--cinema-white)"
+      },
+      "hasPhotos": true,
+      "announcementText": "我们官宣啦",
+      "announcementDate": "2025",
+      "floatingWords": ["公开", "确定", "我们"],
+      "hasBloomLights": true
+    },
+    {
+      "id": "good-times-1",
+      "order": 5,
+      "title": "美好时光",
+      "subtitle": "在一起的每一天都是礼物",
+      "description": "不一定总是宏大的旅行和惊喜。一起吃饭、散步、聊天、分享普通日子，也足够成为闪闪发光的章节。",
+      "theme": "golden",
+      "background": "",
+      "startText": "生活把温柔藏在很多普通瞬间里。",
+      "endText": "而我们刚好一起发现了它们。",
+      "motionStyle": "warm-glow-reveal",
+      "colorPalette": {
+        "primary": "var(--warm-gold-light)",
+        "accent": "var(--rose-gold-light)",
+        "text": "var(--cinema-white)"
+      },
+      "hasPhotos": true,
+      "hasBloomLights": true
+    },
+    {
+      "id": "unexpected-challenge",
+      "order": 6,
+      "title": "意外",
+      "subtitle": "猝不及防的意外，但还是选择坚定走下去",
+      "description": "有些事情来得突然，像一阵没有预告的风。我们慌乱过，也难过过，但最后还是把彼此握得更紧。",
+      "theme": "dark",
+      "background": "",
+      "startText": "不是所有章节都温柔。",
+      "endText": "可我们还是没有松开手。",
+      "motionStyle": "fracture-reveal",
+      "colorPalette": {
+        "primary": "var(--void-light)",
+        "accent": "var(--cinema-gray)",
+        "text": "var(--cinema-white-dim)"
+      },
+      "hasPhotos": false,
+      "struggleLines": [
+        "意外让时间突然慢下来。",
+        "很多计划被打乱，很多情绪涌上来。",
+        "但我们没有让它成为终点。",
+        "我们学着照顾、理解、等待。",
+        "也学着把坚定说得更认真。"
+      ],
+      "transitionText": "风雨之后，晴天才显得格外珍贵。"
+    },
+    {
+      "id": "good-times-2",
+      "order": 7,
+      "title": "美好时光",
+      "subtitle": "走过风雨后的晴天，格外珍贵",
+      "description": "后来那些明亮的日子，像雨后空气里很轻的光。我们更珍惜拥抱、笑声、出发和归来。",
+      "theme": "golden",
+      "background": "",
+      "startText": "晴天重新出现的时候，我们都更懂得珍惜。",
+      "endText": "原来幸福也可以很安静，却很笃定。",
+      "motionStyle": "bloom-glow-reveal",
+      "colorPalette": {
+        "primary": "var(--warm-gold-light)",
+        "accent": "var(--rose-gold-light)",
+        "text": "var(--cinema-white)"
+      },
+      "hasPhotos": true,
+      "hasBloomLights": true
+    },
+    {
+      "id": "now",
+      "order": 8,
+      "title": "现在",
+      "subtitle": "600 天 · 此刻即是最好的时光",
+      "description": "600 天不是故事的终点，而是一段温柔的坐标。谢谢你陪我走到这里，也愿我们继续走向更多个明天。",
+      "theme": "deep-gold",
+      "background": "",
+      "startText": "600 天，刚好够我们学会更认真地相爱。",
+      "endText": "未来很长，我们慢慢来。",
+      "motionStyle": "bento-reveal",
+      "colorPalette": {
+        "primary": "var(--warm-gold)",
+        "accent": "var(--warm-gold-dark)",
+        "text": "var(--cinema-white)"
+      },
+      "hasPhotos": true,
+      "endingQuote": "故事还在继续。",
+      "endingSubtext": "谢谢你，陪我走过这 600 天。",
+      "isBento": true
+    }
+  ]
+}
