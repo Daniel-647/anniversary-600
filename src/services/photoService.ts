@@ -10,6 +10,14 @@ import type {
 const BUCKET_NAME = 'love-photos';
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
+const ALLOWED_CHAPTER_IDS = new Set([
+  'growing-clear',
+  'nanjing',
+  'announcement',
+  'good-times-1',
+  'good-times-2',
+  'now',
+]);
 
 const chapterDefaults: Record<string, Pick<LocalPhoto, 'displayType' | 'animation' | 'mood' | 'colorTone'>> = {
   'growing-clear': { displayType: 'card', animation: 'blur-fade-in', mood: 'intense', colorTone: 'dark' },
@@ -20,12 +28,43 @@ const chapterDefaults: Record<string, Pick<LocalPhoto, 'displayType' | 'animatio
   now: { displayType: 'hero', animation: 'cinematic-zoom', mood: 'nostalgic', colorTone: 'gold' },
 };
 
-function extensionFor(file: File): string {
-  const fromName = file.name.split('.').pop()?.toLowerCase();
-  if (fromName && ['jpg', 'jpeg', 'png', 'webp'].includes(fromName)) return fromName;
+function extensionFor(file: File): 'jpg' | 'jpeg' | 'png' | 'webp' {
+  const fromName = file.name.split('.').pop()?.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (fromName === 'jpg' || fromName === 'jpeg' || fromName === 'png' || fromName === 'webp') {
+    return fromName;
+  }
+
   if (file.type === 'image/png') return 'png';
   if (file.type === 'image/webp') return 'webp';
   return 'jpg';
+}
+
+function safeChapterId(chapterId: string): string {
+  const normalized = chapterId.trim();
+  if (!ALLOWED_CHAPTER_IDS.has(normalized)) {
+    throw new Error('这个章节不支持上传照片。');
+  }
+
+  return normalized;
+}
+
+function createStoragePath(file: File, chapterId: string): string {
+  const chapter = safeChapterId(chapterId);
+  const ext = extensionFor(file);
+  const safeFileName = `${Date.now()}-${crypto.randomUUID()}.${ext}`;
+  const storagePath = `${chapter}/${safeFileName}`;
+
+  if (
+    storagePath.startsWith('/') ||
+    storagePath.includes(`${BUCKET_NAME}/`) ||
+    storagePath.includes('..') ||
+    storagePath.includes('\\') ||
+    !/^[a-z0-9-]+\/[0-9]+-[a-f0-9-]+\.(jpg|jpeg|png|webp)$/.test(storagePath)
+  ) {
+    throw new Error('生成的图片路径不合法，请重试。');
+  }
+
+  return storagePath;
 }
 
 export function validatePhotoFile(file: File): void {
@@ -93,9 +132,7 @@ export async function uploadPhoto(file: File, chapterId: string): Promise<Upload
   validatePhotoFile(file);
 
   const client = requireSupabase();
-  const ext = extensionFor(file);
-  const randomPart = crypto.randomUUID().slice(0, 8);
-  const storagePath = `${chapterId}/${Date.now()}-${randomPart}.${ext}`;
+  const storagePath = createStoragePath(file, chapterId);
 
   const { error } = await client.storage
     .from(BUCKET_NAME)
