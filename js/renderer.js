@@ -45,6 +45,18 @@ const Renderer = (function () {
     }[char]));
   }
 
+  function relationshipDays() {
+    return D.getRelationshipDays?.() ?? 600;
+  }
+
+  function formatDays() {
+    return relationshipDays().toLocaleString();
+  }
+
+  function withDynamicDays(value) {
+    return String(value ?? '').replace(/600/g, formatDays());
+  }
+
   // ==========================================
   // Component: GlassCard
   // ==========================================
@@ -257,11 +269,11 @@ const Renderer = (function () {
     const header = el('div', '', { style: { textAlign: 'center', marginBottom: '3rem' } });
     header.appendChild(el('span', 'chapter-label reveal-text', { text: `Chapter ${chapterData.order}` }));
     header.appendChild(el('h2', 'display-md reveal-text', {
-      text: `${title} · ${subtitle}`,
+      text: withDynamicDays(`${title} · ${subtitle}`),
       style: { marginTop: '0.75rem', color: 'var(--cinema-white)' },
     }));
     header.appendChild(el('p', 'body-lg reveal-text', {
-      text: description,
+      text: withDynamicDays(description),
       style: { marginTop: '1rem', maxWidth: '500px', marginInline: 'auto' },
     }));
     inner.appendChild(header);
@@ -300,7 +312,7 @@ const Renderer = (function () {
     // End text
     if (endText) {
       inner.appendChild(el('p', 'reveal-blur body-sm', {
-        text: endText,
+        text: withDynamicDays(endText),
         style: { textAlign: 'center', marginTop: '3rem', color: 'var(--warm-gold)', opacity: '0.7' },
       }));
     }
@@ -482,11 +494,11 @@ const Renderer = (function () {
         style: { flex: '1', minWidth: '150px', textAlign: 'center' },
       });
       item.appendChild(el('p', '', {
-        text: mem.title,
+        text: withDynamicDays(mem.title),
         style: { fontFamily: 'var(--font-cn)', color: 'var(--warm-gold-light)' },
       }));
       item.appendChild(el('p', 'body-sm', {
-        text: mem.description.substring(0, 30) + '...',
+        text: withDynamicDays(mem.description).substring(0, 30) + '...',
         style: { marginTop: '0.25rem' },
       }));
       momentsRow.appendChild(item);
@@ -500,11 +512,11 @@ const Renderer = (function () {
     });
     totalCard.appendChild(el('div', 'bento-card-label', { text: '已经走过' }));
     totalCard.appendChild(el('div', '', {
-      text: '600',
+      text: formatDays(),
       style: { fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: '200', color: 'var(--warm-gold)', lineHeight: '1', margin: '0.5rem 0' },
     }));
     totalCard.appendChild(el('div', 'bento-card-subtitle', {
-      text: '天 · 1年7个月22天 · 14,400小时 · 864,000分钟',
+      text: `\u4ece 2024.9.21 \u5f00\u59cb · \u7b2c ${formatDays()} \u5929`,
     }));
     grid.appendChild(totalCard);
 
@@ -620,7 +632,7 @@ const Renderer = (function () {
       announcement: '官宣光晕',
       'good-times-1': '日常礼物盒',
       'good-times-2': '雨后晴天照片墙',
-      now: '600 天纪念展厅',
+      now: `${formatDays()} \u5929\u7eaa\u5ff5\u5c55\u5385`,
     };
     return titles[chapterId] || '照片展厅';
   }
@@ -647,11 +659,11 @@ const Renderer = (function () {
     });
     item.appendChild(media);
 
-    const captionText = photo.caption || photo.title || '这一刻也在故事里';
+    const captionText = withDynamicDays(photo.caption || photo.title || '这一刻也在故事里');
     const metaText = [photo.date, photo.location].filter(Boolean).join(' · ');
     item.appendChild(el('div', 'floating-caption', {
       html: `
-        ${photo.title ? `<p class="floating-caption-title">${escapeHtml(photo.title)}</p>` : ''}
+        ${photo.title ? `<p class="floating-caption-title">${escapeHtml(withDynamicDays(photo.title))}</p>` : ''}
         <p>${escapeHtml(captionText)}</p>
         ${metaText ? `<span>${escapeHtml(metaText)}</span>` : ''}
       `,
@@ -676,7 +688,7 @@ const Renderer = (function () {
         style: { left: `${pos}%` },
         'data-memory-id': mem.id,
       }));
-      labelsRow.appendChild(el('span', 'reveal-text', { text: mem.title.substring(0, 8) }));
+      labelsRow.appendChild(el('span', 'reveal-text', { text: withDynamicDays(mem.title).substring(0, 8) }));
     });
 
     container.appendChild(path);
@@ -739,7 +751,7 @@ const Renderer = (function () {
     if (existingEnding) existingEnding.remove();
 
     const endingChapter = D.getChapterById('now');
-    const endingData = endingChapter || { endingQuote: '故事还在继续。', endingSubtext: '谢谢你，陪我走过这 600 天。' };
+    const endingData = endingChapter || { endingQuote: '故事还在继续。', endingSubtext: `谢谢你，陪我走过这 ${formatDays()} 天。` };
 
     const section = el('section', 'ending-section', { id: 'ending' });
     section.appendChild(el('div', 'ending-bg'));
@@ -755,19 +767,19 @@ const Renderer = (function () {
       style: { marginBottom: '2rem' },
     }));
     inner.appendChild(el('p', 'body-lg reveal-blur', {
-      text: '600 天只是一个开始。还有更多的日子，更多的城市，更多的早安与晚安。',
+      text: `${formatDays()} 天只是一个开始。还有更多的日子，更多的城市，更多的早安与晚安。`,
       style: { maxWidth: '500px', marginInline: 'auto', transitionDelay: '0.3s' },
     }));
     inner.appendChild(el('p', 'reveal-blur', {
-      text: endingData.endingSubtext || '谢谢你，陪我走过这 600 天。',
+      text: `谢谢你，陪我走过这 ${formatDays()} 天。`,
       style: { marginTop: '3rem', fontFamily: 'var(--font-cn)', fontSize: '1.25rem', color: 'var(--warm-gold)', opacity: '0.8', transitionDelay: '0.6s' },
     }));
     inner.appendChild(el('p', 'reveal-blur', {
-      text: '— 我们的第 600 天 —',
+      text: `— 我们的第 ${formatDays()} 天 —`,
       style: { marginTop: '1.5rem', fontFamily: 'var(--font-display)', fontSize: '1rem', color: 'var(--cinema-white-dim)', fontStyle: 'italic', transitionDelay: '0.8s' },
     }));
     inner.appendChild(el('div', 'reveal-blur', {
-      html: '<p style="margin-top:5rem;opacity:0.4;font-size:0.75rem;color:var(--cinema-gray);transition-delay:1s">Made with love · Our 600th Day Anniversary</p>',
+      html: `<p style="margin-top:5rem;opacity:0.4;font-size:0.75rem;color:var(--cinema-gray);transition-delay:1s">Made with love · Our ${formatDays()}th Day Anniversary</p>`,
     }));
 
     section.appendChild(inner);

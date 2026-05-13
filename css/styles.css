@@ -1379,6 +1379,131 @@ body {
   max-width: none;
 }
 
+/* Scalable photo rails: every photo chapter can hold many memories without overlap. */
+.showcase-stage,
+.stage-growing-clear,
+.stage-announcement,
+.stage-nanjing,
+.stage-good-times-1,
+.stage-good-times-2,
+.stage-now {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(0.9rem, 2vw, 1.35rem);
+  min-height: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1rem 0.25rem 2.35rem;
+  scroll-padding-inline: 1rem;
+  scroll-snap-type: x proximity;
+  scrollbar-color: rgba(201, 169, 110, 0.45) rgba(232, 228, 225, 0.08);
+  scrollbar-width: thin;
+}
+
+.showcase-stage::-webkit-scrollbar {
+  height: 8px;
+}
+
+.showcase-stage::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: rgba(232, 228, 225, 0.08);
+}
+
+.showcase-stage::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(201, 169, 110, 0.35), rgba(232, 228, 225, 0.22));
+}
+
+.showcase-stage::before,
+.showcase-stage::after {
+  content: "";
+  flex: 0 0 0.35rem;
+}
+
+.showcase-photo-card,
+.stage-growing-clear .showcase-photo-card,
+.stage-announcement .showcase-photo-card,
+.stage-nanjing .showcase-photo-card,
+.stage-good-times-1 .showcase-photo-card,
+.stage-good-times-2 .showcase-photo-card,
+.stage-now .showcase-photo-card,
+.stage-now .showcase-photo-card:first-child,
+.stage-now .showcase-photo-card:not(:first-child) {
+  position: relative;
+  left: auto;
+  top: auto;
+  grid-area: auto;
+  grid-column: auto;
+  grid-row: auto;
+  flex: 0 0 clamp(260px, 34vw, 420px);
+  width: auto;
+  height: auto;
+  min-height: auto;
+  padding: 0;
+  opacity: 1;
+  scroll-snap-align: center;
+}
+
+.showcase-photo-media,
+.stage-now .showcase-photo-card:first-child .showcase-photo-media,
+.stage-now .showcase-photo-card:not(:first-child) .showcase-photo-media {
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 4 / 3;
+}
+
+.floating-caption,
+.stage-growing-clear .floating-caption,
+.stage-announcement .floating-caption,
+.stage-nanjing .floating-caption,
+.stage-good-times-1 .floating-caption,
+.stage-good-times-2 .floating-caption,
+.stage-now .floating-caption,
+.stage-now .showcase-photo-card:not(:first-child) .floating-caption {
+  position: static;
+  inset: auto;
+  transform: none;
+  width: calc(100% - 1rem);
+  max-width: none;
+  margin: -1.35rem auto 0;
+}
+
+.stage-growing-clear .showcase-photo-card {
+  flex-basis: clamp(250px, 31vw, 380px);
+  transform: rotate(calc((var(--i) - 1) * 0.55deg));
+}
+
+.stage-nanjing .showcase-photo-card {
+  flex-basis: clamp(300px, 44vw, 520px);
+  padding: 0.65rem;
+}
+
+.stage-announcement .showcase-photo-card {
+  flex-basis: clamp(300px, 48vw, 560px);
+  transform: translateY(calc((var(--i) % 2) * 0.6rem));
+}
+
+.stage-good-times-1 .showcase-photo-card {
+  flex-basis: clamp(230px, 29vw, 360px);
+}
+
+.stage-good-times-1 .showcase-photo-card:nth-child(4n + 1) {
+  flex-basis: clamp(310px, 43vw, 520px);
+}
+
+.stage-good-times-2 .showcase-photo-card {
+  flex-basis: clamp(260px, 32vw, 400px);
+  transform: translateY(calc((var(--i) % 3) * 0.45rem)) rotate(calc((var(--i) - 1) * 0.45deg));
+}
+
+.stage-now .showcase-photo-card:first-child {
+  flex-basis: clamp(340px, 54vw, 660px);
+}
+
+.stage-now .showcase-photo-card:not(:first-child) {
+  flex-basis: clamp(240px, 28vw, 340px);
+}
+
 @keyframes showcaseGlow {
   from { transform: translate3d(-1.5%, -1%, 0) scale(1); }
   to { transform: translate3d(1.5%, 1%, 0) scale(1.04); }
@@ -1464,6 +1589,35 @@ body {
     grid-column: auto;
     grid-row: auto;
     transform: none;
+  }
+
+  .showcase-stage,
+  .stage-growing-clear,
+  .stage-announcement,
+  .stage-nanjing,
+  .stage-good-times-1,
+  .stage-good-times-2,
+  .stage-now {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+  }
+
+  .stage-growing-clear .showcase-photo-card,
+  .stage-good-times-2 .showcase-photo-card,
+  .stage-announcement .showcase-photo-card,
+  .stage-good-times-1 .showcase-photo-card,
+  .stage-now .showcase-photo-card,
+  .stage-now .showcase-photo-card:first-child,
+  .stage-now .showcase-photo-card:not(:first-child) {
+    flex: 0 0 min(82vw, 360px);
+    width: auto;
+  }
+
+  .stage-now .showcase-photo-card:first-child {
+    flex-basis: min(88vw, 520px);
   }
 
   .showcase-photo-media,

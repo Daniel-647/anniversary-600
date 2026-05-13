@@ -12,6 +12,8 @@ const DataLoader = (function () {
   let memories = [];
   let isLoaded = false;
   let loadError = null;
+  const relationshipStartDate = { year: 2024, monthIndex: 8, day: 21 };
+  const dayMs = 24 * 60 * 60 * 1000;
 
   async function loadAll() {
     if (isLoaded) return true;
@@ -94,9 +96,18 @@ const DataLoader = (function () {
   function getAllMemories() { return memories; }
   function getMemoriesByChapter(cid) { return memories.filter(m => m.chapter === cid); }
   function getHighImportanceMemories() { return memories.filter(m => m.importance === 'high'); }
+  function getRelationshipDays(now = new Date()) {
+    const start = Date.UTC(
+      relationshipStartDate.year,
+      relationshipStartDate.monthIndex,
+      relationshipStartDate.day
+    );
+    const current = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    return Math.max(1, Math.floor((current - start) / dayMs) + 1);
+  }
   function getDashboardStats() {
     const cities = new Set(photos.map(p => p.location).filter(Boolean));
-    return { totalDays: 600, seasons: 4, cities: cities.size, photos: photos.length, memories: memories.length, highMoments: memories.filter(m => m.importance === 'high').length };
+    return { totalDays: getRelationshipDays(), seasons: 4, cities: cities.size, photos: photos.length, memories: memories.length, highMoments: memories.filter(m => m.importance === 'high').length };
   }
   function getStatus() { return { isLoaded, loadError }; }
 
@@ -107,7 +118,7 @@ const DataLoader = (function () {
   const _orig = loadAll;
   loadAll = async function() { const r = await _orig(); if (r) _notifyReady(); return r; };
 
-  return { loadAll, onReady, getStatus, getAllChapters, getChapterById, getAllPhotos, getPhotosByChapter, getHeroPhotoForChapter, getBackgroundPhotoForChapter, getAllMemories, getMemoriesByChapter, getHighImportanceMemories, getDashboardStats, setRemotePhotos, addRemotePhoto };
+  return { loadAll, onReady, getStatus, getAllChapters, getChapterById, getAllPhotos, getPhotosByChapter, getHeroPhotoForChapter, getBackgroundPhotoForChapter, getAllMemories, getMemoriesByChapter, getHighImportanceMemories, getRelationshipDays, getDashboardStats, setRemotePhotos, addRemotePhoto };
 })();
 
 window.DataLoader = DataLoader;
