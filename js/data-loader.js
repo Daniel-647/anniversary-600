@@ -106,8 +106,7 @@ const DataLoader = (function () {
     return Math.max(1, Math.floor((current - start) / dayMs) + 1);
   }
   function getDashboardStats() {
-    const cities = new Set(photos.map(p => p.location).filter(Boolean));
-    return { totalDays: getRelationshipDays(), seasons: 4, cities: cities.size, photos: photos.length, memories: memories.length, highMoments: memories.filter(m => m.importance === 'high').length };
+    return { totalDays: getRelationshipDays(), seasons: 4, cities: 8, photos: photos.length, memories: memories.length, highMoments: memories.filter(m => m.importance === 'high').length };
   }
   function getStatus() { return { isLoaded, loadError }; }
 

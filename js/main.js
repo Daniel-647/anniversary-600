@@ -527,6 +527,53 @@
   }
 
   // ==========================================
+  // Photo Showcase Autoplay
+  // ==========================================
+  function initPhotoShowcasePlayback() {
+    const stages = document.querySelectorAll('.showcase-stage[data-autoplay="true"]');
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    stages.forEach((stage) => {
+      if (stage.dataset.playbackReady === 'true') return;
+      stage.dataset.playbackReady = 'true';
+
+      const motion = stage.dataset.motion || '';
+      const axis = motion === 'vertical-bento' || motion === 'cloud-drift' ? 'y' : 'x';
+      const speed = motion === 'cloud-drift' ? 0.16 : motion === 'vertical-bento' ? 0.12 : 0.2;
+      let paused = false;
+
+      const pause = () => { paused = true; };
+      const resume = () => { paused = false; };
+      stage.addEventListener('pointerenter', pause);
+      stage.addEventListener('pointerleave', resume);
+      stage.addEventListener('focusin', pause);
+      stage.addEventListener('focusout', resume);
+      stage.addEventListener('pointerdown', pause);
+      stage.addEventListener('pointerup', resume);
+      stage.addEventListener('wheel', pause, { passive: true });
+
+      function tick() {
+        const max = axis === 'y'
+          ? stage.scrollHeight - stage.clientHeight
+          : stage.scrollWidth - stage.clientWidth;
+
+        if (!paused && max > 8) {
+          if (axis === 'y') {
+            stage.scrollTop = stage.scrollTop >= max - 2 ? 0 : stage.scrollTop + speed;
+          } else {
+            stage.scrollLeft = stage.scrollLeft >= max - 2 ? 0 : stage.scrollLeft + speed;
+          }
+        }
+
+        requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    });
+  }
+
+  // ==========================================
   // ==========================================
   function reinitAnimationObservers() {
     setTimeout(() => {
@@ -538,6 +585,7 @@
       initNumberCounters();
       initEndingParticles();
       initPhotoSceneAnimations();
+      initPhotoShowcasePlayback();
     }, 100);
   }
 

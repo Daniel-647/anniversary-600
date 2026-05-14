@@ -444,7 +444,6 @@ const Renderer = (function () {
   function renderNow(container, data) {
     const stats = D.getDashboardStats();
     const highMemories = D.getHighImportanceMemories();
-    const chapterMemories = D.getMemoriesByChapter('six-hundred-days');
 
     const grid = el('div', 'bento-grid');
 
@@ -461,23 +460,12 @@ const Renderer = (function () {
 
     // Card: Cities
     grid.appendChild(makeBentoCard({
-      icon: '📍', label: '一起去过', value: stats.cities, unit: '座城市',
+      icon: '📍', label: '一起去过', value: stats.cities, unit: '个城市',
     }));
 
     // Card: Photos
     grid.appendChild(makeBentoCard({
-      icon: '📸', label: '拍过的照片', value: stats.photos, unit: '张回忆',
-      colSpan: 2,
-    }));
-
-    // Card: Memories
-    grid.appendChild(makeBentoCard({
-      icon: '🎵', label: '收藏的记忆', value: stats.memories, unit: '个瞬间',
-    }));
-
-    // Card: High Moments
-    grid.appendChild(makeBentoCard({
-      icon: '💬', label: '重要的时刻', value: stats.highMoments, unit: '个节点',
+      icon: '📸', label: '定格的瞬间', value: stats.photos, unit: '张回忆',
       colSpan: 2,
     }));
 
@@ -615,7 +603,12 @@ const Renderer = (function () {
     if (!chapterPhotos.length) {
       showcase.appendChild(renderEmptyShowcase(chapterId));
     } else {
-      const stage = el('div', `showcase-stage stage-${chapterId}`);
+      const stageMotion = getShowcaseMotion(chapterId);
+      const stage = el('div', `showcase-stage stage-${chapterId}`, {
+        tabindex: '0',
+        'data-motion': stageMotion,
+        'data-autoplay': 'true',
+      });
       chapterPhotos.forEach((photo, i) => {
         stage.appendChild(renderShowcasePhoto(photo, i));
       });
@@ -635,6 +628,18 @@ const Renderer = (function () {
       now: `${formatDays()} \u5929\u7eaa\u5ff5\u5c55\u5385`,
     };
     return titles[chapterId] || '照片展厅';
+  }
+
+  function getShowcaseMotion(chapterId) {
+    const motions = {
+      'growing-clear': 'fragment-rail',
+      nanjing: 'film-flow',
+      announcement: 'halo-carousel',
+      'good-times-1': 'vertical-bento',
+      'good-times-2': 'cloud-drift',
+      now: 'orbit-gallery',
+    };
+    return motions[chapterId] || 'gallery-flow';
   }
 
   function renderEmptyShowcase(chapterId) {
