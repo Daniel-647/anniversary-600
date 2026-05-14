@@ -540,12 +540,19 @@
 
       const motion = stage.dataset.motion || '';
       const axis = motion === 'vertical-bento' || motion === 'cloud-drift' ? 'y' : 'x';
-      const speed = motion === 'cloud-drift' ? 0.34 : motion === 'vertical-bento' ? 0.3 : 0.42;
+      const pixelsPerSecond = motion === 'cloud-drift'
+        ? 9
+        : motion === 'vertical-bento'
+          ? 8
+          : motion === 'film-flow'
+            ? 14
+            : 11;
       let paused = false;
       let position = axis === 'y' ? stage.scrollTop : stage.scrollLeft;
       let scrollSyncFrame = null;
       let isAutoScrolling = false;
       let resumeTimer = null;
+      let lastFrameTime = performance.now();
 
       const pause = () => { paused = true; };
       const resume = () => { paused = false; };
@@ -569,13 +576,15 @@
         });
       }, { passive: true });
 
-      function tick() {
+      function tick(now) {
+        const deltaSeconds = Math.min((now - lastFrameTime) / 1000, 0.08);
+        lastFrameTime = now;
         const max = axis === 'y'
           ? stage.scrollHeight - stage.clientHeight
           : stage.scrollWidth - stage.clientWidth;
 
         if (!paused && max > 8) {
-          position += speed;
+          position += pixelsPerSecond * deltaSeconds;
           if (position >= max - 2) position = 0;
 
           if (axis === 'y') {

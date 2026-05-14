@@ -271,7 +271,9 @@ const Renderer = (function () {
 
     // Chapter header
     const header = el('div', '', { style: { textAlign: 'center', marginBottom: '3rem' } });
-    header.appendChild(el('span', 'chapter-label reveal-text', { text: `Chapter ${chapterData.order}` }));
+    header.appendChild(el('span', 'chapter-label reveal-text', {
+      html: `Chapter <span class="number-glyph">${chapterData.order}</span>`,
+    }));
     header.appendChild(el('h2', 'display-md reveal-text', {
       text: withDynamicDays(`${title} · ${subtitle}`),
       style: { marginTop: '0.75rem', color: 'var(--cinema-white)' },
