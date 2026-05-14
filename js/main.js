@@ -540,18 +540,34 @@
 
       const motion = stage.dataset.motion || '';
       const axis = motion === 'vertical-bento' || motion === 'cloud-drift' ? 'y' : 'x';
-      const speed = motion === 'cloud-drift' ? 0.16 : motion === 'vertical-bento' ? 0.12 : 0.2;
+      const speed = motion === 'cloud-drift' ? 0.34 : motion === 'vertical-bento' ? 0.3 : 0.42;
       let paused = false;
+      let position = axis === 'y' ? stage.scrollTop : stage.scrollLeft;
+      let scrollSyncFrame = null;
+      let isAutoScrolling = false;
+      let resumeTimer = null;
 
       const pause = () => { paused = true; };
       const resume = () => { paused = false; };
-      stage.addEventListener('pointerenter', pause);
-      stage.addEventListener('pointerleave', resume);
+      const pauseBriefly = () => {
+        pause();
+        if (resumeTimer) clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(resume, 1400);
+      };
       stage.addEventListener('focusin', pause);
       stage.addEventListener('focusout', resume);
       stage.addEventListener('pointerdown', pause);
       stage.addEventListener('pointerup', resume);
-      stage.addEventListener('wheel', pause, { passive: true });
+      stage.addEventListener('pointercancel', resume);
+      stage.addEventListener('wheel', pauseBriefly, { passive: true });
+      stage.addEventListener('scroll', () => {
+        if (isAutoScrolling) return;
+        if (scrollSyncFrame) return;
+        scrollSyncFrame = requestAnimationFrame(() => {
+          position = axis === 'y' ? stage.scrollTop : stage.scrollLeft;
+          scrollSyncFrame = null;
+        });
+      }, { passive: true });
 
       function tick() {
         const max = axis === 'y'
@@ -559,11 +575,17 @@
           : stage.scrollWidth - stage.clientWidth;
 
         if (!paused && max > 8) {
+          position += speed;
+          if (position >= max - 2) position = 0;
+
           if (axis === 'y') {
-            stage.scrollTop = stage.scrollTop >= max - 2 ? 0 : stage.scrollTop + speed;
+            isAutoScrolling = true;
+            stage.scrollTop = Math.round(position);
           } else {
-            stage.scrollLeft = stage.scrollLeft >= max - 2 ? 0 : stage.scrollLeft + speed;
+            isAutoScrolling = true;
+            stage.scrollLeft = Math.round(position);
           }
+          requestAnimationFrame(() => { isAutoScrolling = false; });
         }
 
         requestAnimationFrame(tick);

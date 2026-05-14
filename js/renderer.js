@@ -57,6 +57,10 @@ const Renderer = (function () {
     return String(value ?? '').replace(/600/g, formatDays());
   }
 
+  function stripEndingPunctuation(value) {
+    return withDynamicDays(value).replace(/[。.!！?？]+$/u, '');
+  }
+
   // ==========================================
   // Component: GlassCard
   // ==========================================
@@ -657,11 +661,18 @@ const Renderer = (function () {
     const item = el('article', `showcase-photo-card reveal-blur photo-${photo.displayType || 'card'} ${photo.remote ? 'remote-photo' : 'json-photo'}`, {
       style: { '--i': index },
     });
-    const media = el('div', 'showcase-photo-media', {
-      style: {
-        backgroundImage: `linear-gradient(180deg, rgba(6,6,9,0.04), rgba(6,6,9,0.34)), url(${photo.src})`,
-      },
+    const media = el('div', 'showcase-photo-media');
+    const image = el('img', 'showcase-photo-img', {
+      src: photo.src,
+      alt: photo.title || photo.caption || 'memory photo',
+      loading: 'lazy',
+      decoding: 'async',
     });
+    image.addEventListener('load', () => {
+      const ratio = image.naturalWidth / Math.max(image.naturalHeight, 1);
+      item.dataset.orientation = ratio < 0.82 ? 'portrait' : ratio > 1.28 ? 'landscape' : 'square';
+    });
+    media.appendChild(image);
     item.appendChild(media);
 
     const captionText = withDynamicDays(photo.caption || photo.title || '这一刻也在故事里');
@@ -768,8 +779,8 @@ const Renderer = (function () {
       style: { marginBottom: '2rem' },
     }));
     inner.appendChild(el('h2', 'display-xl reveal-blur text-gradient-gold', {
-      text: endingData.endingQuote || '故事还在继续。',
-      style: { marginBottom: '2rem' },
+      text: stripEndingPunctuation(endingData.endingQuote || '故事还在继续'),
+      style: { marginBottom: '2rem', textAlign: 'center', marginInline: 'auto' },
     }));
     inner.appendChild(el('p', 'body-lg reveal-blur', {
       text: `${formatDays()} 天只是一个开始。还有更多的日子，更多的城市，更多的早安与晚安。`,

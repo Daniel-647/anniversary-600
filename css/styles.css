@@ -285,10 +285,12 @@ body {
 
 .hero-number {
   display: block;
-  font-family: var(--font-display);
-  font-size: clamp(8rem, 18vw, 16rem);
+  font-family: var(--font-body);
+  font-size: clamp(7rem, 16vw, 14rem);
   font-weight: 200;
-  line-height: 0.9;
+  line-height: 0.82;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums lining-nums;
   background: linear-gradient(
     180deg,
     var(--cinema-white) 0%,
@@ -298,7 +300,7 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 0 40px rgba(201, 169, 110, 0.2));
+  filter: drop-shadow(0 0 34px rgba(201, 169, 110, 0.22));
 }
 
 .hero-number-label {
@@ -1506,7 +1508,7 @@ body {
 
 .showcase-stage[data-autoplay="true"] {
   cursor: grab;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   overscroll-behavior: contain;
 }
 
@@ -1870,6 +1872,58 @@ body {
 
   .photo-floating-image {
     aspect-ratio: 2/3;
+  }
+}
+
+.showcase-photo-media,
+.stage-now .showcase-photo-card:first-child .showcase-photo-media,
+.stage-now .showcase-photo-card:not(:first-child) .showcase-photo-media,
+.showcase-stage[data-motion="vertical-bento"] .showcase-photo-media,
+.showcase-stage[data-motion="vertical-bento"] .showcase-photo-card:nth-child(5n + 1) .showcase-photo-media,
+.showcase-stage[data-motion="cloud-drift"] .showcase-photo-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: auto;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(232, 228, 225, 0.04), rgba(6, 6, 9, 0.36)),
+    rgba(10, 10, 15, 0.52);
+}
+
+.showcase-photo-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(68vh, 560px);
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+.showcase-stage[data-motion="orbit-gallery"] .showcase-photo-card:first-child .showcase-photo-img {
+  max-height: min(74vh, 660px);
+}
+
+.showcase-photo-card[data-orientation="portrait"] {
+  flex-basis: clamp(220px, 25vw, 340px);
+}
+
+.showcase-photo-card[data-orientation="landscape"] {
+  flex-basis: clamp(320px, 46vw, 580px);
+}
+
+.showcase-photo-card[data-orientation="square"] {
+  flex-basis: clamp(250px, 32vw, 420px);
+}
+
+@media (max-width: 768px) {
+  .showcase-photo-card[data-orientation="portrait"],
+  .showcase-photo-card[data-orientation="landscape"],
+  .showcase-photo-card[data-orientation="square"] {
+    flex-basis: min(82vw, 360px);
   }
 }
 
