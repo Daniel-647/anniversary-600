@@ -310,6 +310,141 @@
   margin-top: 0.25rem;
 }
 
+.record-modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 510;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.record-modal-root.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.record-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(201, 169, 110, 0.16), transparent 34rem),
+    rgba(3, 3, 7, 0.74);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.record-modal {
+  position: relative;
+  width: min(620px, 100%);
+  border: 1px solid rgba(232, 228, 225, 0.12);
+  border-radius: 1.65rem;
+  background:
+    linear-gradient(145deg, rgba(26, 26, 38, 0.92), rgba(8, 8, 14, 0.96)),
+    radial-gradient(circle at 24% 0%, rgba(201, 169, 110, 0.2), transparent 22rem);
+  box-shadow: 0 30px 110px rgba(0, 0, 0, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.record-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 228, 225, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--cinema-white);
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+.record-modal-kicker {
+  color: var(--warm-gold);
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.record-modal h2 {
+  margin-top: 0.45rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 300;
+}
+
+.record-modal-side {
+  margin-top: 0.35rem;
+  color: var(--cinema-white-dim);
+}
+
+.record-modal-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.4rem;
+}
+
+.record-modal-form label {
+  display: grid;
+  gap: 0.55rem;
+  color: var(--warm-gold-light);
+  font-size: 0.86rem;
+}
+
+.record-modal textarea {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  border: 1px solid rgba(232, 228, 225, 0.12);
+  border-radius: 1rem;
+  background: rgba(6, 6, 9, 0.46);
+  color: var(--cinema-white);
+  padding: 1rem;
+  font: inherit;
+  line-height: 1.7;
+  outline: none;
+}
+
+.record-modal textarea:focus {
+  border-color: rgba(201, 169, 110, 0.5);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+}
+
+.record-modal-message {
+  min-height: 1.4rem;
+  color: var(--cinema-white-dim);
+}
+
+.record-modal-message.error {
+  color: #ffb6a8;
+}
+
+.record-modal-message.success {
+  color: var(--warm-gold-light);
+}
+
+.record-submit {
+  justify-self: end;
+  border: 1px solid rgba(201, 169, 110, 0.38);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.23), rgba(201, 169, 110, 0.08));
+  color: var(--cinema-white);
+  padding: 0.95rem 1.45rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.record-submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 @media (max-width: 760px) {
   .upload-modal {
     max-height: 92vh;
@@ -327,6 +462,10 @@
   }
 
   .upload-submit {
+    justify-self: stretch;
+  }
+
+  .record-submit {
     justify-self: stretch;
   }
 }

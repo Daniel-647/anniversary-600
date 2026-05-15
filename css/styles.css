@@ -742,6 +742,203 @@ input[type="date"] {
 }
 
 /* ========================================
+   Text Record Wall
+   ======================================== */
+.text-record-section {
+  position: relative;
+  min-height: 100vh;
+  padding: var(--section-padding);
+  background: linear-gradient(180deg, var(--void-deep), #08080d 48%, var(--void-deep));
+  overflow: hidden;
+}
+
+.text-record-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(74, 96, 120, 0.18), transparent 18rem),
+    radial-gradient(circle at 82% 26%, rgba(201, 169, 110, 0.13), transparent 20rem),
+    linear-gradient(90deg, rgba(232, 228, 225, 0.035), transparent 45%, rgba(201, 169, 110, 0.035));
+}
+
+.text-record-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.text-record-heading {
+  max-width: 720px;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.text-record-heading .body-sm {
+  margin-top: 0.8rem;
+}
+
+.text-record-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 1.6rem);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.text-record-column {
+  position: relative;
+  min-height: 560px;
+  border: 1px solid rgba(232, 228, 225, 0.1);
+  border-radius: var(--card-radius-lg);
+  padding: clamp(1rem, 2vw, 1.35rem);
+  background: rgba(232, 228, 225, 0.045);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.text-record-column.left {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(74, 96, 120, 0.22), transparent 18rem),
+    rgba(232, 228, 225, 0.04);
+}
+
+.text-record-column.right {
+  background:
+    radial-gradient(circle at 80% 0%, rgba(201, 169, 110, 0.2), transparent 18rem),
+    rgba(232, 228, 225, 0.04);
+}
+
+.text-record-column-top {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.text-record-column-top p {
+  color: var(--warm-gold);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.text-record-column-top h3 {
+  margin-top: 0.2rem;
+  font-family: var(--font-cn);
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  font-weight: 300;
+}
+
+.text-record-add {
+  flex: 0 0 auto;
+  border: 1px solid rgba(201, 169, 110, 0.35);
+  border-radius: 999px;
+  background: rgba(201, 169, 110, 0.1);
+  color: var(--cinema-white);
+  padding: 0.72rem 1rem;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: transform 0.45s var(--ease-out-expo), background 0.45s ease, box-shadow 0.45s ease;
+}
+
+.text-record-add:hover {
+  transform: translateY(-2px);
+  background: rgba(201, 169, 110, 0.17);
+  box-shadow: 0 0 36px rgba(201, 169, 110, 0.12);
+}
+
+.text-record-list {
+  display: grid;
+  align-content: start;
+  gap: 0.85rem;
+  max-height: 450px;
+  overflow-y: auto;
+  padding: 0.2rem 0.35rem 1rem 0.1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 169, 110, 0.38) rgba(232, 228, 225, 0.08);
+}
+
+.text-record-item {
+  position: relative;
+  border: 1px solid rgba(232, 228, 225, 0.1);
+  border-radius: 1.1rem;
+  padding: 0.9rem 1rem;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: recordNoteFloat 5.4s ease-in-out infinite alternate;
+  transition: transform 0.45s var(--ease-out-expo), border-color 0.45s ease, box-shadow 0.45s ease;
+}
+
+.text-record-item:nth-child(2n) {
+  animation-delay: -1.8s;
+}
+
+.text-record-item.left {
+  background: linear-gradient(135deg, rgba(74, 96, 120, 0.24), rgba(232, 228, 225, 0.055));
+}
+
+.text-record-item.right {
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.2), rgba(232, 228, 225, 0.055));
+}
+
+.text-record-item:hover {
+  transform: translateY(-3px) scale(1.006);
+  border-color: rgba(201, 169, 110, 0.28);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.32);
+}
+
+.text-record-item time {
+  display: block;
+  color: var(--warm-gold-light);
+  font-family: var(--font-number);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums lining-nums;
+  opacity: 0.86;
+}
+
+.text-record-item p {
+  margin-top: 0.45rem;
+  color: var(--cinema-white);
+  font-family: var(--font-cn);
+  font-size: 0.96rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+.text-record-empty {
+  display: grid;
+  place-items: center;
+  min-height: 250px;
+  border: 1px solid rgba(232, 228, 225, 0.08);
+  border-radius: 1.2rem;
+  color: var(--cinema-white-dim);
+  background: rgba(232, 228, 225, 0.035);
+  text-align: center;
+  padding: 1.5rem;
+}
+
+@keyframes recordNoteFloat {
+  from { translate: 0 0; }
+  to { translate: 0 -0.45rem; }
+}
+
+@media (max-width: 860px) {
+  .text-record-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .text-record-column {
+    min-height: 420px;
+  }
+
+  .text-record-list {
+    max-height: 360px;
+  }
+}
+
+/* ========================================
    Audio Toggle
    ======================================== */
 .audio-toggle {

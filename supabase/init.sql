@@ -93,3 +93,39 @@ with check (
 
 -- Deletion and updates are intentionally not open to anon users.
 -- For real access control, use Supabase Auth or an Edge Function instead of a shared editor password.
+
+create table if not exists public.text_records (
+  id uuid primary key default gen_random_uuid(),
+  side text not null,
+  content text not null,
+  occurred_at text not null,
+  sort_order integer not null,
+  created_at timestamptz default now()
+);
+
+alter table public.text_records enable row level security;
+
+drop policy if exists "text records public read" on public.text_records;
+create policy "text records public read"
+on public.text_records
+for select
+to anon
+using (true);
+
+drop policy if exists "text records public insert" on public.text_records;
+create policy "text records public insert"
+on public.text_records
+for insert
+to anon
+with check (
+  side in ('left', 'right')
+  and length(trim(content)) between 1 and 1200
+  and occurred_at <> ''
+  and sort_order >= 1
+);
+
+create index if not exists text_records_side_idx on public.text_records (side);
+create index if not exists text_records_sort_order_idx on public.text_records (sort_order);
+create index if not exists text_records_created_at_idx on public.text_records (created_at);
+
+-- Deletion and updates are intentionally not open to anon users.

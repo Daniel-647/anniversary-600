@@ -76,6 +76,33 @@ export interface UploadModalPayload {
   location: string;
 }
 
+export type TextRecordSide = 'left' | 'right';
+
+export interface TextRecord {
+  id: string;
+  side: TextRecordSide;
+  content: string;
+  occurredAt: string;
+  sortOrder: number;
+  createdAt: string;
+}
+
+export interface TextRecordRow {
+  id: string;
+  side: TextRecordSide;
+  content: string;
+  occurred_at: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface CreateTextRecordInput {
+  side: TextRecordSide;
+  content: string;
+  occurredAt: string;
+  sortOrder: number;
+}
+
 declare global {
   interface Window {
     DataLoader?: {
