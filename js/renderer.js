@@ -606,12 +606,20 @@ const Renderer = (function () {
         <h3>${getShowcaseTitle(chapterId)}</h3>
       `,
     }));
-    top.appendChild(el('button', 'showcase-upload-button', {
+    const actions = el('div', 'showcase-actions');
+    actions.appendChild(el('button', 'showcase-autoplay-button is-active', {
+      type: 'button',
+      'data-autoplay-toggle': chapterId,
+      'aria-pressed': 'true',
+      html: '<span class="autoplay-dot"></span><span>自动播放</span>',
+    }));
+    actions.appendChild(el('button', 'showcase-upload-button', {
       type: 'button',
       'data-upload-chapter': chapterId,
       'data-chapter-title': chapter?.title || chapterId,
       text: '添加照片',
     }));
+    top.appendChild(actions);
     showcase.appendChild(top);
 
     if (!chapterPhotos.length) {

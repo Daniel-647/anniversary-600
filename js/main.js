@@ -543,12 +543,12 @@
       const motion = stage.dataset.motion || '';
       const axis = motion === 'vertical-bento' || motion === 'cloud-drift' ? 'y' : 'x';
       const pixelsPerSecond = motion === 'cloud-drift'
-        ? 4.8
+        ? 7.2
         : motion === 'vertical-bento'
-          ? 4.2
+          ? 6.4
           : motion === 'film-flow'
-            ? 6.8
-            : 5.6;
+            ? 10.5
+            : 8.2;
       let paused = false;
       let position = axis === 'y' ? stage.scrollTop : stage.scrollLeft;
       let scrollSyncFrame = null;
@@ -585,7 +585,7 @@
           ? stage.scrollHeight - stage.clientHeight
           : stage.scrollWidth - stage.clientWidth;
 
-        if (!paused && max > 8) {
+        if (!paused && stage.dataset.autoplay === 'true' && max > 8) {
           position += pixelsPerSecond * deltaSeconds;
           if (position >= max - 2) position = 0;
 
@@ -606,6 +606,23 @@
     });
   }
 
+  function initPhotoShowcaseControls() {
+    document.querySelectorAll('[data-autoplay-toggle]').forEach((button) => {
+      if (button.dataset.autoplayBound === 'true') return;
+      button.dataset.autoplayBound = 'true';
+      button.addEventListener('click', () => {
+        const showcase = button.closest('.chapter-showcase');
+        const stage = showcase?.querySelector('.showcase-stage');
+        if (!stage) return;
+
+        const enabled = stage.dataset.autoplay !== 'true';
+        stage.dataset.autoplay = enabled ? 'true' : 'false';
+        button.classList.toggle('is-active', enabled);
+        button.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+      });
+    });
+  }
+
   // ==========================================
   // ==========================================
   function reinitAnimationObservers() {
@@ -619,6 +636,7 @@
       initEndingParticles();
       initPhotoSceneAnimations();
       initPhotoShowcasePlayback();
+      initPhotoShowcaseControls();
     }, 100);
   }
 

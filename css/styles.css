@@ -1075,6 +1075,51 @@ input[type="date"] {
   transition: transform 0.45s var(--ease-out-expo), background 0.45s ease, box-shadow 0.45s ease;
 }
 
+.showcase-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.showcase-autoplay-button {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid rgba(232, 228, 225, 0.16);
+  border-radius: 999px;
+  background: rgba(232, 228, 225, 0.055);
+  color: var(--cinema-white-dim);
+  padding: 0.8rem 1rem;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: transform 0.45s var(--ease-out-expo), background 0.45s ease, border-color 0.45s ease, color 0.45s ease, box-shadow 0.45s ease;
+}
+
+.showcase-autoplay-button.is-active {
+  border-color: rgba(201, 169, 110, 0.52);
+  background: rgba(201, 169, 110, 0.16);
+  color: var(--cinema-white);
+  box-shadow: 0 0 30px rgba(201, 169, 110, 0.11);
+}
+
+.autoplay-dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--cinema-gray);
+  box-shadow: none;
+}
+
+.showcase-autoplay-button.is-active .autoplay-dot {
+  background: var(--warm-gold);
+  box-shadow: 0 0 16px rgba(201, 169, 110, 0.75);
+}
+
+.showcase-autoplay-button:hover,
 .showcase-upload-button:hover,
 .showcase-empty:hover {
   transform: translateY(-2px) scale(1.015);
@@ -1752,6 +1797,10 @@ input[type="date"] {
 
   .showcase-upload-button {
     align-self: flex-start;
+  }
+
+  .showcase-actions {
+    justify-content: flex-start;
   }
 
   .showcase-empty {
