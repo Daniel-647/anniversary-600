@@ -2,14 +2,14 @@ import type { TextRecord, TextRecordSide } from '../types';
 
 const sideCopy: Record<TextRecordSide, { title: string; kicker: string; empty: string }> = {
   left: {
-    title: '此刻的回声',
+    title: 'Daniel',
     kicker: 'Left Notes',
     empty: '这里还没有记录，先写下第一句话。',
   },
   right: {
-    title: '后来也记得',
+    title: 'AVA',
     kicker: 'Right Notes',
-    empty: '这一侧等待一条新的时间戳。',
+    empty: '这里还没有记录，先写下第一句话。',
   },
 };
 
@@ -38,8 +38,8 @@ function renderTextRecordWall(records: TextRecord[]): string {
       <div class="section-inner text-record-inner">
         <div class="text-record-heading">
           <p class="chapter-label">Text Notes</p>
-          <h2 class="display-md">那些被写下来的话</h2>
-          <p class="body-sm">它们不必很长，只要足够真实。时间会替每一句话安静落款。</p>
+          <h2 class="display-md">记录很幸运拥有彼此的瞬间</h2>
+          <p class="body-sm">write it ，时间会替每一句话安静落款。</p>
         </div>
         <div class="text-record-columns">
           ${renderColumn('left', records)}
