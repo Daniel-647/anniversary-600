@@ -864,7 +864,7 @@ input[type="date"] {
   position: relative;
   border: 1px solid rgba(232, 228, 225, 0.1);
   border-radius: 1.1rem;
-  padding: 0.9rem 1rem;
+  padding: 0.9rem 1rem 2.7rem;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   animation: recordNoteFloat 5.4s ease-in-out infinite alternate;
@@ -905,6 +905,43 @@ input[type="date"] {
   font-size: 0.96rem;
   line-height: 1.75;
   white-space: pre-wrap;
+}
+
+.inline-edit-button {
+  position: absolute;
+  right: 0.7rem;
+  bottom: 0.7rem;
+  z-index: 8;
+  border: 1px solid rgba(232, 228, 225, 0.16);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgba(232, 228, 225, 0.12), rgba(201, 169, 110, 0.1)),
+    rgba(8, 8, 14, 0.72);
+  color: var(--cinema-white);
+  padding: 0.36rem 0.62rem;
+  font-size: 0.72rem;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  opacity: 0.72;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.26);
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-out-expo), border-color 0.3s ease, background 0.3s ease;
+}
+
+.inline-edit-button:hover {
+  opacity: 1;
+  transform: translateY(-1px) scale(1.04);
+  border-color: rgba(201, 169, 110, 0.45);
+  background:
+    linear-gradient(135deg, rgba(201, 169, 110, 0.22), rgba(232, 228, 225, 0.1)),
+    rgba(10, 10, 16, 0.82);
+}
+
+.photo-edit-button {
+  right: 0.85rem;
+  bottom: 0.85rem;
 }
 
 .text-record-empty {

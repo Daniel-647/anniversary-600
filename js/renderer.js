@@ -703,6 +703,15 @@ const Renderer = (function () {
       `,
     }));
 
+    if (photo.remote && photo.id) {
+      item.appendChild(el('button', 'inline-edit-button photo-edit-button', {
+        type: 'button',
+        'data-edit-photo': photo.id,
+        'aria-label': '修改照片信息',
+        text: '修改',
+      }));
+    }
+
     return item;
   }
 

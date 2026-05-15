@@ -31,6 +31,16 @@ export function appendTextRecord(record: TextRecord): void {
   list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
 }
 
+export function replaceTextRecord(record: TextRecord): void {
+  const item = document.querySelector(`[data-record-id="${escapeAttr(record.id)}"]`);
+  if (!item) {
+    appendTextRecord(record);
+    return;
+  }
+
+  item.outerHTML = renderRecordItem(record);
+}
+
 function renderTextRecordWall(records: TextRecord[]): string {
   return `
     <section class="text-record-section reveal-blur" id="text-record-wall">
@@ -76,11 +86,16 @@ function renderColumn(side: TextRecordSide, records: TextRecord[]): string {
 
 function renderRecordItem(record: TextRecord): string {
   return `
-    <article class="text-record-item ${record.side}">
+    <article class="text-record-item ${record.side}" data-record-id="${escapeAttr(record.id)}">
       <time>${escapeHtml(record.occurredAt)}</time>
       <p>${escapeHtml(record.content)}</p>
+      <button class="inline-edit-button record-edit-button" type="button" data-edit-record="${escapeAttr(record.id)}" aria-label="修改文字记录">修改</button>
     </article>
   `;
+}
+
+function escapeAttr(value: string): string {
+  return escapeHtml(value).replace(/`/g, '&#096;');
 }
 
 function escapeHtml(value: string): string {

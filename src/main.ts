@@ -6,27 +6,31 @@ import '../js/cursor.js';
 import '../js/scroll.js';
 import '../js/main.js';
 import './styles/upload.css';
+import { PhotoEditModal } from './components/PhotoEditModal';
 import { PhotoUploadModal } from './components/PhotoUploadModal';
 import { TextRecordModal } from './components/TextRecordModal';
-import { appendTextRecord, mountTextRecordWall } from './components/textRecordWall';
+import { appendTextRecord, mountTextRecordWall, replaceTextRecord } from './components/textRecordWall';
 import {
   createPhotoRecord,
   fetchAllRemotePhotos,
   getNextSortOrder,
   uploadPhoto,
+  updatePhotoRecord,
 } from './services/photoService';
 import {
   createTextRecord,
   fetchTextRecords,
   formatCurrentRecordHour,
   getNextTextRecordSortOrder,
+  updateTextRecord,
 } from './services/textRecordService';
 import { isSupabaseConfigured } from './lib/supabase';
-import type { LocalPhoto, TextRecord, TextRecordSide, UploadModalPayload } from './types';
+import type { LocalPhoto, PhotoEditPayload, TextRecord, TextRecordSide, UploadModalPayload } from './types';
 
 const editorPassword = import.meta.env.VITE_EDITOR_PASSWORD as string | undefined;
 const uploadableChapters = new Set(['growing-clear', 'nanjing', 'announcement', 'good-times-1', 'good-times-2', 'now']);
 const modal = new PhotoUploadModal();
+const photoEditModal = new PhotoEditModal();
 const recordModal = new TextRecordModal();
 let textRecords: TextRecord[] = [];
 
@@ -137,6 +141,35 @@ async function handleCreateTextRecord(side: TextRecordSide, content: string): Pr
   notify('已经写进这面记录墙', 'success');
 }
 
+async function handleUpdatePhoto(originalPhoto: LocalPhoto, payload: PhotoEditPayload): Promise<void> {
+  const replacement = payload.file ? await uploadPhoto(payload.file, originalPhoto.chapter) : null;
+  const updatedPhoto = await updatePhotoRecord({
+    id: originalPhoto.id,
+    title: payload.title,
+    caption: payload.caption,
+    date: payload.date,
+    location: payload.location,
+    imageUrl: replacement?.imageUrl,
+    storagePath: replacement?.storagePath,
+  });
+
+  window.DataLoader?.addRemotePhoto?.(updatedPhoto);
+  rerenderPage();
+  notify('照片信息已经更新', 'success');
+}
+
+async function handleUpdateTextRecord(recordId: string, content: string): Promise<void> {
+  const record = await updateTextRecord({
+    id: recordId,
+    content,
+    occurredAt: formatCurrentRecordHour(),
+  });
+
+  textRecords = textRecords.map((item) => (item.id === record.id ? record : item));
+  replaceTextRecord(record);
+  notify('文字记录已经更新', 'success');
+}
+
 function getChapterTitle(button: HTMLElement): string {
   const section = button.closest('.section');
   const heading = section?.querySelector('h2')?.textContent?.trim();
@@ -179,6 +212,44 @@ function bindTextRecordEntrypoints(): void {
   });
 }
 
+function bindEditEntrypoints(): void {
+  document.body.addEventListener('click', async (event) => {
+    const target = event.target as HTMLElement;
+    const photoButton = target.closest<HTMLElement>('[data-edit-photo]');
+    const recordButton = target.closest<HTMLElement>('[data-edit-record]');
+
+    if (!photoButton && !recordButton) return;
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!(await askEditorPassword())) return;
+    if (!isSupabaseConfigured) {
+      notify('Supabase 尚未配置，暂时不能保存修改。', 'error');
+      return;
+    }
+
+    if (photoButton) {
+      const photoId = photoButton.dataset.editPhoto;
+      const photo = window.DataLoader?.getAllPhotos().find((item) => item.id === photoId);
+      if (!photo?.remote || !photo.id) {
+        notify('这张照片不是云端记录，暂时不能在网页里覆盖。', 'error');
+        return;
+      }
+      photoEditModal.open(photo, (payload) => handleUpdatePhoto(photo, payload));
+      return;
+    }
+
+    const recordId = recordButton?.dataset.editRecord;
+    const record = textRecords.find((item) => item.id === recordId);
+    if (!record) {
+      notify('没有找到这条文字记录，请刷新后再试。', 'error');
+      return;
+    }
+
+    recordModal.openEdit(record, (content) => handleUpdateTextRecord(record.id, content));
+  });
+}
+
 async function loadRemotePhotos(): Promise<void> {
   if (!window.DataLoader) return;
 
@@ -211,6 +282,7 @@ async function loadTextRecords(): Promise<void> {
 function bootRemoteLayer(): void {
   bindUploadEntrypoints();
   bindTextRecordEntrypoints();
+  bindEditEntrypoints();
 
   if (!isSupabaseConfigured) {
     notify('Supabase 环境变量未配置，上传功能暂不可用。', 'info');

@@ -75,11 +75,14 @@ SQL 默认策略：
 
 - `photos`：允许 anon 公开读取
 - `photos`：允许 anon 插入照片元数据
-- `photos`：不开放 anon 更新/删除
+- `photos`：允许 anon 更新照片标题、配文、日期、地点等元数据
+- `photos`：不开放 anon 删除
+- `text_records`：允许 anon 公开读取、插入、更新文字记录
+- `text_records`：不开放 anon 删除
 - `storage.objects`：允许 anon 读取 `love-photos`
 - `storage.objects`：允许 anon 上传到指定照片章节目录
 
-编辑密码只是防误操作，不是真正后端安全。真实安全建议使用 Supabase Auth 或 Edge Function，在服务端校验权限后再上传/写表。
+编辑密码只是防误操作，不是真正后端安全。现在网页端的修改按钮也复用这个密码；真实安全建议使用 Supabase Auth 或 Edge Function，在服务端校验权限后再上传/写表。
 
 ## 内容管理
 
@@ -147,7 +150,7 @@ npm run preview
 
 **上传失败：row-level security**
 
-确认 `photos public insert` policy 和 `love photos public upload` policy 已创建。注意章节 ID 只能是照片章节：`growing-clear`、`nanjing`、`announcement`、`good-times-1`、`good-times-2`、`now`。
+确认 `photos public insert`、`photos public update`、`text records public update` 和 `love photos public upload` policy 已创建。注意章节 ID 只能是照片章节：`growing-clear`、`nanjing`、`announcement`、`good-times-1`、`good-times-2`、`now`。
 
 **图片太大或格式不支持**
 

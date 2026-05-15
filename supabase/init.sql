@@ -48,6 +48,26 @@ with check (
   and sort_order >= 1
 );
 
+drop policy if exists "photos public update" on public.photos;
+create policy "photos public update"
+on public.photos
+for update
+to anon
+using (true)
+with check (
+  chapter_id in (
+    'growing-clear',
+    'nanjing',
+    'announcement',
+    'good-times-1',
+    'good-times-2',
+    'now'
+  )
+  and image_url <> ''
+  and storage_path <> ''
+  and sort_order >= 1
+);
+
 create index if not exists photos_chapter_id_idx on public.photos (chapter_id);
 create index if not exists photos_sort_order_idx on public.photos (sort_order);
 create index if not exists photos_created_at_idx on public.photos (created_at);
@@ -91,7 +111,8 @@ with check (
   )
 );
 
--- Deletion and updates are intentionally not open to anon users.
+-- Deletion is intentionally not open to anon users.
+-- Updates are protected only by the frontend editor password, so treat this as lightweight access control.
 -- For real access control, use Supabase Auth or an Edge Function instead of a shared editor password.
 
 create table if not exists public.text_records (
@@ -124,8 +145,21 @@ with check (
   and sort_order >= 1
 );
 
+drop policy if exists "text records public update" on public.text_records;
+create policy "text records public update"
+on public.text_records
+for update
+to anon
+using (true)
+with check (
+  side in ('left', 'right')
+  and length(trim(content)) between 1 and 1200
+  and occurred_at <> ''
+  and sort_order >= 1
+);
+
 create index if not exists text_records_side_idx on public.text_records (side);
 create index if not exists text_records_sort_order_idx on public.text_records (sort_order);
 create index if not exists text_records_created_at_idx on public.text_records (created_at);
 
--- Deletion and updates are intentionally not open to anon users.
+-- Deletion is intentionally not open to anon users.

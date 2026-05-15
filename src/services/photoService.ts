@@ -4,6 +4,7 @@ import type {
   DisplayType,
   LocalPhoto,
   RemotePhotoRow,
+  UpdatePhotoRecordInput,
   UploadPhotoResult,
 } from '../types';
 
@@ -179,6 +180,34 @@ export async function createPhotoRecord(photoData: CreatePhotoRecordInput): Prom
 
   if (error) {
     throw new Error(`照片信息保存失败：${error.message}`);
+  }
+
+  return remoteRowToLocalPhoto(data);
+}
+
+export async function updatePhotoRecord(photoData: UpdatePhotoRecordInput): Promise<LocalPhoto> {
+  const client = requireSupabase();
+  const updateValues: Record<string, string | null> = {
+    title: photoData.title?.trim() || null,
+    caption: photoData.caption?.trim() || null,
+    date: photoData.date?.trim() || null,
+    location: photoData.location?.trim() || null,
+  };
+
+  if (photoData.imageUrl && photoData.storagePath) {
+    updateValues.image_url = photoData.imageUrl;
+    updateValues.storage_path = photoData.storagePath;
+  }
+
+  const { data, error } = await client
+    .from('photos')
+    .update(updateValues)
+    .eq('id', photoData.id)
+    .select('*')
+    .single();
+
+  if (error) {
+    throw new Error(`照片信息更新失败：${error.message}`);
   }
 
   return remoteRowToLocalPhoto(data);

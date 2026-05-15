@@ -1,6 +1,7 @@
-import type { TextRecordSide } from '../types';
+import type { TextRecord, TextRecordSide } from '../types';
 
 type SubmitHandler = (content: string) => Promise<void>;
+type ModalMode = 'create' | 'edit';
 
 interface ModalState {
   content: string;
@@ -16,6 +17,7 @@ const sideLabels: Record<TextRecordSide, string> = {
 export class TextRecordModal {
   private root: HTMLElement;
   private side: TextRecordSide = 'left';
+  private mode: ModalMode = 'create';
   private onSubmit: SubmitHandler | null = null;
   private state: ModalState = {
     content: '',
@@ -32,9 +34,20 @@ export class TextRecordModal {
   }
 
   open(side: TextRecordSide, onSubmit: SubmitHandler): void {
+    this.mode = 'create';
     this.side = side;
     this.onSubmit = onSubmit;
     this.state = { content: '', status: 'idle', message: '' };
+    this.root.classList.add('is-open');
+    this.render();
+    setTimeout(() => this.root.querySelector('textarea')?.focus(), 80);
+  }
+
+  openEdit(record: TextRecord, onSubmit: SubmitHandler): void {
+    this.mode = 'edit';
+    this.side = record.side;
+    this.onSubmit = onSubmit;
+    this.state = { content: record.content, status: 'idle', message: '' };
     this.root.classList.add('is-open');
     this.render();
     setTimeout(() => this.root.querySelector('textarea')?.focus(), 80);
@@ -72,7 +85,7 @@ export class TextRecordModal {
       this.setMessage('loading', '正在保存这条记录...');
       try {
         await this.onSubmit(this.state.content);
-        this.setMessage('success', '已经写进记录贴。');
+        this.setMessage('success', this.mode === 'edit' ? '修改已经保存。' : '已经写进记录贴。');
         setTimeout(() => this.close(), 850);
       } catch (error) {
         this.setMessage('error', error instanceof Error ? error.message : '保存失败，请稍后再试。');
@@ -99,12 +112,16 @@ export class TextRecordModal {
     const textarea = this.root.querySelector('[name="content"]') as HTMLTextAreaElement | null;
     const submit = this.root.querySelector('[data-record-submit]') as HTMLButtonElement | null;
 
-    if (title) title.textContent = `添加${sideLabels[this.side]}`;
+    if (title) title.textContent = this.mode === 'edit' ? `修改${sideLabels[this.side]}` : `添加${sideLabels[this.side]}`;
     if (side) side.textContent = sideLabels[this.side];
     if (textarea) textarea.value = this.state.content;
     if (submit) {
       submit.disabled = this.state.status === 'loading';
-      submit.textContent = this.state.status === 'loading' ? '保存中...' : '保存记录';
+      submit.textContent = this.state.status === 'loading'
+        ? '保存中...'
+        : this.mode === 'edit'
+          ? '保存修改'
+          : '保存记录';
     }
     this.renderMessage();
   }

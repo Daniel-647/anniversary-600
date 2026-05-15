@@ -1,5 +1,11 @@
 import { isSupabaseConfigured, requireSupabase, supabase } from '../lib/supabase';
-import type { CreateTextRecordInput, TextRecord, TextRecordRow, TextRecordSide } from '../types';
+import type {
+  CreateTextRecordInput,
+  TextRecord,
+  TextRecordRow,
+  TextRecordSide,
+  UpdateTextRecordInput,
+} from '../types';
 
 export function formatCurrentRecordHour(date = new Date()): string {
   const year = date.getFullYear();
@@ -64,6 +70,31 @@ export async function createTextRecord(input: CreateTextRecordInput): Promise<Te
 
   if (error) {
     throw new Error(`文字记录保存失败：${error.message}`);
+  }
+
+  return textRecordRowToRecord(data);
+}
+
+export async function updateTextRecord(input: UpdateTextRecordInput): Promise<TextRecord> {
+  const client = requireSupabase();
+  const content = input.content.trim();
+
+  if (!content) {
+    throw new Error('请先写下这一条记录。');
+  }
+
+  const { data, error } = await client
+    .from('text_records')
+    .update({
+      content,
+      occurred_at: input.occurredAt,
+    })
+    .eq('id', input.id)
+    .select('*')
+    .single();
+
+  if (error) {
+    throw new Error(`文字记录更新失败：${error.message}`);
   }
 
   return textRecordRowToRecord(data);

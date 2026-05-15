@@ -63,6 +63,16 @@ export interface CreatePhotoRecordInput {
   colorTone?: string;
 }
 
+export interface UpdatePhotoRecordInput {
+  id: string;
+  title?: string;
+  caption?: string;
+  date?: string;
+  location?: string;
+  imageUrl?: string;
+  storagePath?: string;
+}
+
 export interface UploadPhotoResult {
   imageUrl: string;
   storagePath: string;
@@ -70,6 +80,14 @@ export interface UploadPhotoResult {
 
 export interface UploadModalPayload {
   file: File;
+  title: string;
+  caption: string;
+  date: string;
+  location: string;
+}
+
+export interface PhotoEditPayload {
+  file?: File | null;
   title: string;
   caption: string;
   date: string;
@@ -101,6 +119,12 @@ export interface CreateTextRecordInput {
   content: string;
   occurredAt: string;
   sortOrder: number;
+}
+
+export interface UpdateTextRecordInput {
+  id: string;
+  content: string;
+  occurredAt: string;
 }
 
 declare global {
