@@ -57,6 +57,14 @@ const Renderer = (function () {
     return String(value ?? '').replace(/600/g, formatDays());
   }
 
+  function daysGlyph() {
+    return `<span class="number-glyph">${formatDays()}</span>`;
+  }
+
+  function withDynamicDaysHtml(value) {
+    return escapeHtml(value).replace(/600/g, daysGlyph());
+  }
+
   function stripEndingPunctuation(value) {
     return withDynamicDays(value).replace(/[。.!！?？]+$/u, '');
   }
@@ -275,7 +283,7 @@ const Renderer = (function () {
       html: `Chapter <span class="number-glyph">${chapterData.order}</span>`,
     }));
     header.appendChild(el('h2', 'display-md reveal-text', {
-      text: withDynamicDays(`${title} · ${subtitle}`),
+      html: withDynamicDaysHtml(`${title} · ${subtitle}`),
       style: { marginTop: '0.75rem', color: 'var(--cinema-white)' },
     }));
     header.appendChild(el('p', 'body-lg reveal-text', {
@@ -631,7 +639,7 @@ const Renderer = (function () {
       announcement: '官宣光晕',
       'good-times-1': '日常礼物盒',
       'good-times-2': '雨后晴天照片墙',
-      now: `${formatDays()} \u5929\u7eaa\u5ff5\u5c55\u5385`,
+      now: `${daysGlyph()} \u5929\u7eaa\u5ff5\u5c55\u5385`,
     };
     return titles[chapterId] || '照片展厅';
   }
@@ -677,12 +685,12 @@ const Renderer = (function () {
     media.appendChild(image);
     item.appendChild(media);
 
-    const captionText = withDynamicDays(photo.caption || photo.title || '这一刻也在故事里');
+    const captionText = photo.caption || photo.title || '这一刻也在故事里';
     const metaText = [photo.date, photo.location].filter(Boolean).join(' · ');
     item.appendChild(el('div', 'floating-caption', {
       html: `
-        ${photo.title ? `<p class="floating-caption-title">${escapeHtml(withDynamicDays(photo.title))}</p>` : ''}
-        <p>${escapeHtml(captionText)}</p>
+        ${photo.title ? `<p class="floating-caption-title">${withDynamicDaysHtml(photo.title)}</p>` : ''}
+        <p>${withDynamicDaysHtml(captionText)}</p>
         ${metaText ? `<span>${escapeHtml(metaText)}</span>` : ''}
       `,
     }));
@@ -785,19 +793,19 @@ const Renderer = (function () {
       style: { marginBottom: '2rem', textAlign: 'center', marginInline: 'auto' },
     }));
     inner.appendChild(el('p', 'body-lg reveal-blur', {
-      text: `${formatDays()} 天只是一个开始。还有更多的日子，更多的城市，更多的早安与晚安。`,
+      html: `${daysGlyph()} 天只是一个开始。还有更多的日子，更多的城市，更多的早安与晚安。`,
       style: { maxWidth: '500px', marginInline: 'auto', transitionDelay: '0.3s' },
     }));
     inner.appendChild(el('p', 'reveal-blur', {
-      text: `谢谢你，陪我走过这 ${formatDays()} 天。`,
+      html: `谢谢你，陪我走过这 ${daysGlyph()} 天。`,
       style: { marginTop: '3rem', fontFamily: 'var(--font-cn)', fontSize: '1.25rem', color: 'var(--warm-gold)', opacity: '0.8', transitionDelay: '0.6s' },
     }));
     inner.appendChild(el('p', 'reveal-blur', {
-      text: `— 我们的第 ${formatDays()} 天 —`,
+      html: `— 我们的第 ${daysGlyph()} 天 —`,
       style: { marginTop: '1.5rem', fontFamily: 'var(--font-display)', fontSize: '1rem', color: 'var(--cinema-white-dim)', fontStyle: 'italic', transitionDelay: '0.8s' },
     }));
     inner.appendChild(el('div', 'reveal-blur', {
-      html: `<p style="margin-top:5rem;opacity:0.4;font-size:0.75rem;color:var(--cinema-gray);transition-delay:1s">Made with love · Our ${formatDays()}th Day Anniversary</p>`,
+      html: `<p style="margin-top:5rem;opacity:0.4;font-size:0.75rem;color:var(--cinema-gray);transition-delay:1s">Made with love · Our ${daysGlyph()}th Day Anniversary</p>`,
     }));
 
     section.appendChild(inner);

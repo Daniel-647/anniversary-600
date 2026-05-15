@@ -19,7 +19,9 @@
     const dynamicDays = window.DataLoader?.getRelationshipDays?.() ?? 600;
     const titleLine = title.querySelector('.display-lg');
     number.textContent = dynamicDays.toLocaleString();
-    if (titleLine) titleLine.textContent = `\u6211\u4eec\u7684\u7b2c ${dynamicDays.toLocaleString()} \u5929`;
+    if (titleLine) {
+      titleLine.innerHTML = `\u6211\u4eec\u7684\u7b2c <span class="number-glyph">${dynamicDays.toLocaleString()}</span> \u5929`;
+    }
 
     // Phase 1: Subtitle fades in (like a film opening)
     setTimeout(() => {
