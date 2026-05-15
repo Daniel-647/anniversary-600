@@ -18,8 +18,8 @@
       },
       "hasPhotos": false,
       "chatBubbles": [
-        { "type": "received", "text": "如果未来还是看不清呢？" },
-        { "type": "sent", "text": "那就先一起走一段，慢慢看清。" },
+        { "type": "received", "text": "如果未来始终不确定呢？" },
+        { "type": "sent", "text": "那就先一起走一段，慢慢来，慢慢清晰。" },
         { "type": "received", "text": "会不会很难？" },
         { "type": "sent", "text": "会。但我想和你试试。" }
       ],
@@ -55,11 +55,11 @@
       "id": "nanjing",
       "order": 3,
       "title": "金陵",
-      "subtitle": "金陵城，或许算是一个转折点",
+      "subtitle": "南京城，或许算是一个转折点",
       "description": "那座城市有夜色、暖灯、风和冬天。我们在那里留下的脚步，像一段电影里刚好亮起的长镜头。",
       "theme": "warm",
       "background": "",
-      "startText": "走在金陵的街上，很多话都不用说出口。",
+      "startText": "漫步在金陵的街上，很多话都不用说出口。",
       "endText": "有些城市，会替人记住心动。",
       "motionStyle": "warm-glow-reveal",
       "colorPalette": {
@@ -75,7 +75,7 @@
         { "label": "冬风", "position": 47 },
         { "label": "并肩", "position": 64 },
         { "label": "转折", "position": 78 },
-        { "label": "记住", "position": 92 }
+        { "label": "确认", "position": 92 }
       ],
       "hasSnow": true
     },
@@ -97,7 +97,7 @@
       },
       "hasPhotos": true,
       "announcementText": "我们官宣啦",
-      "announcementDate": "2025",
+      "announcementDate": "2025-03-21",
       "floatingWords": ["公开", "确定", "我们"],
       "hasBloomLights": true
     },
@@ -124,8 +124,8 @@
       "id": "unexpected-challenge",
       "order": 6,
       "title": "意外",
-      "subtitle": "猝不及防的意外，但还是选择坚定走下去",
-      "description": "有些事情来得突然，像一阵没有预告的风。我们慌乱过，也难过过，但最后还是把彼此握得更紧。",
+      "subtitle": "尽管来的猝不及防，但我们还是选择坚定走下去",
+      "description": "有些事情来得突然，像一阵没有预告的风。我们慌乱过，纠结过，也伤心过，但最后还是把彼此握得更紧。",
       "theme": "dark",
       "background": "",
       "startText": "不是所有章节都温柔。",
@@ -144,14 +144,14 @@
         "我们学着照顾、理解、等待。",
         "也学着把坚定说得更认真。"
       ],
-      "transitionText": "风雨之后，晴天才显得格外珍贵。"
+      "transitionText": "不是所有章节都温柔，"
     },
     {
       "id": "good-times-2",
       "order": 7,
-      "title": "美好时光",
-      "subtitle": "走过风雨后的晴天，格外珍贵",
-      "description": "后来那些明亮的日子，像雨后空气里很轻的光。我们更珍惜拥抱、笑声、出发和归来。",
+      "title": "雨后晴天",
+      "subtitle": "意外的阴霾逐渐散去，阳光重新铺满我们的生活",
+      "description": "后来那些明亮的日子，像雨后空气里很轻的光。我们更珍惜拥抱、笑声、离别和重逢。",
       "theme": "golden",
       "background": "",
       "startText": "晴天重新出现的时候，我们都更懂得珍惜。",

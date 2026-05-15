@@ -20,7 +20,7 @@
     const titleLine = title.querySelector('.display-lg');
     number.textContent = dynamicDays.toLocaleString();
     if (titleLine) {
-      titleLine.innerHTML = `\u6211\u4eec\u7684\u7b2c <span class="number-glyph">${dynamicDays.toLocaleString()}</span> \u5929`;
+      titleLine.textContent = '\u6211\u4eec\u7684\u7b2c';
     }
 
     // Phase 1: Subtitle fades in (like a film opening)
@@ -543,12 +543,12 @@
       const motion = stage.dataset.motion || '';
       const axis = motion === 'vertical-bento' || motion === 'cloud-drift' ? 'y' : 'x';
       const pixelsPerSecond = motion === 'cloud-drift'
-        ? 9
+        ? 4.8
         : motion === 'vertical-bento'
-          ? 8
+          ? 4.2
           : motion === 'film-flow'
-            ? 14
-            : 11;
+            ? 6.8
+            : 5.6;
       let paused = false;
       let position = axis === 'y' ? stage.scrollTop : stage.scrollLeft;
       let scrollSyncFrame = null;
@@ -591,10 +591,10 @@
 
           if (axis === 'y') {
             isAutoScrolling = true;
-            stage.scrollTop = Math.round(position);
+            stage.scrollTop = position;
           } else {
             isAutoScrolling = true;
-            stage.scrollLeft = Math.round(position);
+            stage.scrollLeft = position;
           }
           requestAnimationFrame(() => { isAutoScrolling = false; });
         }
