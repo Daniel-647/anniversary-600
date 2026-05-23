@@ -27,7 +27,7 @@ export class TextRecordModal {
 
   constructor() {
     this.root = document.createElement('div');
-    this.root.className = 'record-modal-root';
+    this.root.className = 'record-modal-root text-record-modal-root';
     this.root.innerHTML = this.template();
     document.body.appendChild(this.root);
     this.bindEvents();
@@ -60,7 +60,7 @@ export class TextRecordModal {
   private bindEvents(): void {
     this.root.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
-      if (target.matches('[data-close-record-modal]') || target === this.root.querySelector('.record-modal-backdrop')) {
+      if (target.matches('[data-close-record-modal]')) {
         this.close();
       }
     });
@@ -129,7 +129,7 @@ export class TextRecordModal {
   private template(): string {
     return `
       <div class="record-modal-backdrop" aria-hidden="true"></div>
-      <section class="record-modal" role="dialog" aria-modal="true" aria-labelledby="record-modal-title">
+      <section class="record-modal text-record-editor-modal" role="dialog" aria-modal="true" aria-labelledby="record-modal-title">
         <button class="record-modal-close" type="button" data-close-record-modal aria-label="关闭">×</button>
         <p class="record-modal-kicker">Text Record</p>
         <h2 id="record-modal-title" data-record-modal-title>添加记录</h2>
