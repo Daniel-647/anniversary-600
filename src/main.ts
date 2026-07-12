@@ -50,10 +50,65 @@ function notify(message: string, tone: 'success' | 'error' | 'info' = 'info'): v
   }, 3600);
 }
 
+function requireSitePassword(): Promise<void> {
+  return new Promise<void>((resolve) => {
+    if (!editorPassword) {
+      resolve();
+      return;
+    }
+
+    const root = document.createElement('div');
+    root.className = 'password-gate-root is-open site-entrance-gate';
+    root.innerHTML = `
+      <div class="password-gate-backdrop"></div>
+      <form class="password-gate" aria-label="访问密码">
+        <p class="upload-modal-kicker">Welcome Gate</p>
+        <h2>输入密码开启旅程</h2>
+        <p>这是一个私密记忆网站，请输入访问密码以继续浏览。</p>
+        <input type="password" name="password" autocomplete="current-password" placeholder="访问密码" required>
+        <span class="password-gate-message" aria-live="polite"></span>
+        <button type="submit" class="upload-submit">进入网站</button>
+      </form>
+    `;
+    document.body.appendChild(root);
+
+    const input = root.querySelector('input');
+    const form = root.querySelector('form');
+    const message = root.querySelector('.password-gate-message');
+
+    input?.addEventListener('keydown', () => {
+      if (message) message.textContent = '';
+    });
+
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const value = input?.value ?? '';
+      if (value !== editorPassword) {
+        if (message) message.textContent = '密码不正确，请重新输入。';
+        return;
+      }
+      
+      sessionStorage.setItem('site_authenticated', 'true');
+      
+      root.classList.remove('is-open');
+      setTimeout(() => {
+        root.remove();
+        resolve();
+      }, 250);
+    });
+
+    setTimeout(() => input?.focus(), 150);
+  });
+}
+
 function askEditorPassword(): Promise<boolean> {
   if (!editorPassword) {
     notify('未配置编辑密码。请在环境变量中设置 VITE_EDITOR_PASSWORD。', 'error');
     return Promise.resolve(false);
+  }
+
+  if (sessionStorage.getItem('site_authenticated') === 'true') {
+    return Promise.resolve(true);
   }
 
   return new Promise((resolve) => {
@@ -99,6 +154,7 @@ function askEditorPassword(): Promise<boolean> {
     setTimeout(() => root.querySelector('input')?.focus(), 80);
   });
 }
+
 
 function rerenderPage(): void {
   window.Renderer?.renderAll();
@@ -279,7 +335,11 @@ async function loadTextRecords(): Promise<void> {
   }
 }
 
-function bootRemoteLayer(): void {
+async function bootRemoteLayer(): Promise<void> {
+  if (editorPassword && sessionStorage.getItem('site_authenticated') !== 'true') {
+    await requireSitePassword();
+  }
+
   bindUploadEntrypoints();
   bindTextRecordEntrypoints();
   bindEditEntrypoints();
@@ -301,7 +361,9 @@ function bootRemoteLayer(): void {
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bootRemoteLayer);
+  document.addEventListener('DOMContentLoaded', () => {
+    void bootRemoteLayer();
+  });
 } else {
-  bootRemoteLayer();
+  void bootRemoteLayer();
 }
