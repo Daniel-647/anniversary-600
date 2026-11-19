@@ -163,3 +163,55 @@ create index if not exists text_records_sort_order_idx on public.text_records (s
 create index if not exists text_records_created_at_idx on public.text_records (created_at);
 
 -- Deletion is intentionally not open to anon users.
+
+create table if not exists public.makeup_coupons (
+  id uuid primary key default gen_random_uuid(),
+  side text not null,
+  title text not null,
+  description text not null default '',
+  status text not null default 'available',
+  used_at text,
+  used_note text,
+  sort_order integer not null,
+  created_at timestamptz default now()
+);
+
+alter table public.makeup_coupons enable row level security;
+
+drop policy if exists "makeup coupons public read" on public.makeup_coupons;
+create policy "makeup coupons public read"
+on public.makeup_coupons
+for select
+to anon
+using (true);
+
+drop policy if exists "makeup coupons public insert" on public.makeup_coupons;
+create policy "makeup coupons public insert"
+on public.makeup_coupons
+for insert
+to anon
+with check (
+  side in ('left', 'right')
+  and length(trim(title)) between 1 and 80
+  and length(description) <= 300
+  and status = 'available'
+  and sort_order >= 1
+);
+
+drop policy if exists "makeup coupons public update" on public.makeup_coupons;
+create policy "makeup coupons public update"
+on public.makeup_coupons
+for update
+to anon
+using (true)
+with check (
+  side in ('left', 'right')
+  and length(trim(title)) between 1 and 80
+  and length(description) <= 300
+  and status in ('available', 'used')
+  and sort_order >= 1
+);
+
+create index if not exists makeup_coupons_side_idx on public.makeup_coupons (side);
+create index if not exists makeup_coupons_status_idx on public.makeup_coupons (status);
+create index if not exists makeup_coupons_sort_order_idx on public.makeup_coupons (sort_order);

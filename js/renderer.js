@@ -766,7 +766,12 @@ const Renderer = (function () {
     while (nextEl) {
       const toRemove = nextEl;
       nextEl = nextEl.nextElementSibling;
-      if (toRemove.tagName === 'SECTION' && toRemove.id !== 'hero') {
+      if (
+        toRemove.tagName === 'SECTION' &&
+        toRemove.id !== 'hero' &&
+        toRemove.id !== 'text-record-wall' &&
+        toRemove.id !== 'makeup-coupon-wall'
+      ) {
         toRemove.remove();
       }
     }

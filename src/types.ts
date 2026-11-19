@@ -127,6 +127,45 @@ export interface UpdateTextRecordInput {
   occurredAt: string;
 }
 
+export type CouponStatus = 'available' | 'used';
+
+export interface MakeupCoupon {
+  id: string;
+  side: TextRecordSide;
+  title: string;
+  description: string;
+  status: CouponStatus;
+  usedAt: string | null;
+  usedNote: string | null;
+  sortOrder: number;
+  createdAt: string;
+}
+
+export interface MakeupCouponRow {
+  id: string;
+  side: TextRecordSide;
+  title: string;
+  description: string;
+  status: CouponStatus;
+  used_at: string | null;
+  used_note: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface CreateCouponInput {
+  side: TextRecordSide;
+  title: string;
+  description: string;
+  sortOrder: number;
+}
+
+export interface UseCouponInput {
+  id: string;
+  usedAt: string;
+  usedNote?: string;
+}
+
 declare global {
   interface Window {
     DataLoader?: {

@@ -976,6 +976,354 @@ input[type="date"] {
 }
 
 /* ========================================
+   Makeup Coupon Wall
+   ======================================== */
+.coupon-section {
+  position: relative;
+  padding: var(--section-padding);
+  background: linear-gradient(180deg, var(--void-deep), #090910 52%, var(--void-deep));
+  overflow: hidden;
+}
+
+.coupon-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 22% 28%, rgba(74, 96, 120, 0.14), transparent 20rem),
+    radial-gradient(circle at 78% 28%, rgba(201, 169, 110, 0.14), transparent 20rem),
+    linear-gradient(180deg, rgba(201, 169, 110, 0.02), transparent 50%, rgba(201, 169, 110, 0.02));
+}
+
+.coupon-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.coupon-heading {
+  max-width: 720px;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.coupon-heading .body-sm {
+  margin-top: 0.8rem;
+}
+
+.coupon-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 1.6rem);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.coupon-column {
+  position: relative;
+  min-height: 440px;
+  border: 1px solid rgba(232, 228, 225, 0.1);
+  border-radius: var(--card-radius-lg);
+  padding: clamp(1rem, 2vw, 1.35rem);
+  background: rgba(232, 228, 225, 0.04);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.coupon-column.left {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(74, 96, 120, 0.2), transparent 18rem),
+    rgba(232, 228, 225, 0.04);
+}
+
+.coupon-column.right {
+  background:
+    radial-gradient(circle at 82% 0%, rgba(201, 169, 110, 0.18), transparent 18rem),
+    rgba(232, 228, 225, 0.04);
+}
+
+.coupon-column-top {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.15rem;
+}
+
+.coupon-column-top p {
+  color: var(--warm-gold);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.coupon-column-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 0.2rem;
+}
+
+.coupon-column-top h3 {
+  font-family: var(--font-cn);
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  font-weight: 300;
+}
+
+.coupon-count-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(201, 169, 110, 0.28);
+  border-radius: 999px;
+  padding: 0.2rem 0.62rem;
+  font-size: 0.72rem;
+  color: var(--warm-gold-light);
+  background: rgba(201, 169, 110, 0.09);
+  font-variant-numeric: tabular-nums;
+}
+
+.coupon-add {
+  flex: 0 0 auto;
+  border: 1px solid rgba(201, 169, 110, 0.35);
+  border-radius: 999px;
+  background: rgba(201, 169, 110, 0.1);
+  color: var(--cinema-white);
+  padding: 0.72rem 1rem;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: transform 0.45s var(--ease-out-expo), background 0.45s ease, box-shadow 0.45s ease;
+}
+
+.coupon-add:hover {
+  transform: translateY(-2px);
+  background: rgba(201, 169, 110, 0.17);
+  box-shadow: 0 0 36px rgba(201, 169, 110, 0.12);
+}
+
+.coupon-list {
+  display: grid;
+  align-content: start;
+  gap: 0.95rem;
+  max-height: 460px;
+  overflow-y: auto;
+  padding: 0.2rem 0.35rem 1rem 0.1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 169, 110, 0.38) rgba(232, 228, 225, 0.08);
+}
+
+.coupon-ticket {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 118px;
+  border: 1px solid rgba(232, 228, 225, 0.13);
+  border-radius: 1.15rem;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+  transition: transform 0.45s var(--ease-out-expo), border-color 0.45s ease, box-shadow 0.45s ease, opacity 0.35s ease;
+}
+
+.coupon-ticket.left {
+  background: linear-gradient(135deg, rgba(74, 96, 120, 0.24), rgba(232, 228, 225, 0.05));
+}
+
+.coupon-ticket.right {
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.22), rgba(232, 228, 225, 0.05));
+}
+
+.coupon-ticket.is-available:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201, 169, 110, 0.36);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.34);
+}
+
+.coupon-ticket.is-used {
+  opacity: 0.56;
+  border-color: rgba(232, 228, 225, 0.08);
+  background: rgba(232, 228, 225, 0.025);
+}
+
+.coupon-ticket-main {
+  position: relative;
+  padding: 1rem 1.1rem;
+  border-right: 1px dashed rgba(232, 228, 225, 0.16);
+}
+
+.coupon-ticket-main::before,
+.coupon-ticket-main::after {
+  content: '';
+  position: absolute;
+  right: -7px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #0b0b12;
+  border: 1px solid rgba(232, 228, 225, 0.12);
+  z-index: 2;
+}
+
+.coupon-ticket-main::before {
+  top: -7px;
+}
+
+.coupon-ticket-main::after {
+  bottom: -7px;
+}
+
+.coupon-ticket-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.45rem;
+}
+
+.coupon-ticket-badge {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  padding: 0.16rem 0.5rem;
+  border-radius: 999px;
+  color: var(--warm-gold-light);
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  background: rgba(201, 169, 110, 0.12);
+}
+
+.coupon-ticket.is-used .coupon-ticket-badge {
+  color: var(--cinema-white-dim);
+  border-color: rgba(232, 228, 225, 0.16);
+  background: rgba(232, 228, 225, 0.06);
+}
+
+.coupon-ticket-meta time {
+  color: var(--cinema-white-dim);
+  font-family: var(--font-number);
+  font-size: 0.72rem;
+  opacity: 0.78;
+}
+
+.coupon-ticket-title {
+  font-family: var(--font-cn);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--cinema-white);
+  line-height: 1.4;
+}
+
+.coupon-ticket.is-used .coupon-ticket-title {
+  text-decoration: line-through;
+  text-decoration-color: rgba(232, 228, 225, 0.35);
+}
+
+.coupon-ticket-desc {
+  margin-top: 0.35rem;
+  color: var(--cinema-white-dim);
+  font-family: var(--font-cn);
+  font-size: 0.86rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.coupon-ticket-used-note {
+  margin-top: 0.45rem;
+  color: var(--warm-gold-light);
+  font-size: 0.78rem;
+  opacity: 0.85;
+}
+
+.coupon-ticket-stub {
+  display: grid;
+  place-items: center;
+  padding: 0.75rem;
+  background: rgba(6, 6, 10, 0.28);
+}
+
+.coupon-use-btn {
+  border: 1px solid rgba(201, 169, 110, 0.45);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.22), rgba(201, 169, 110, 0.08));
+  color: var(--cinema-white);
+  padding: 0.55rem 0.85rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease-out-expo), background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coupon-use-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.34), rgba(201, 169, 110, 0.14));
+  box-shadow: 0 0 24px rgba(201, 169, 110, 0.22);
+}
+
+.coupon-stamp {
+  display: grid;
+  place-items: center;
+  gap: 0.15rem;
+  padding: 0.35rem 0.5rem;
+  border: 1.5px solid rgba(201, 169, 110, 0.42);
+  border-radius: 0.55rem;
+  color: var(--warm-gold-light);
+  transform: rotate(-8deg);
+  text-align: center;
+}
+
+.coupon-stamp span {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+}
+
+.coupon-stamp small {
+  font-family: var(--font-number);
+  font-size: 0.64rem;
+  opacity: 0.8;
+}
+
+.coupon-empty {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  border: 1px solid rgba(232, 228, 225, 0.08);
+  border-radius: 1.2rem;
+  color: var(--cinema-white-dim);
+  background: rgba(232, 228, 225, 0.035);
+  text-align: center;
+  padding: 1.5rem;
+}
+
+@media (max-width: 860px) {
+  .coupon-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .coupon-column {
+    min-height: 360px;
+  }
+
+  .coupon-list {
+    max-height: 380px;
+  }
+
+  .coupon-ticket {
+    grid-template-columns: 1fr;
+  }
+
+  .coupon-ticket-main {
+    border-right: none;
+    border-bottom: 1px dashed rgba(232, 228, 225, 0.16);
+  }
+
+  .coupon-ticket-main::before,
+  .coupon-ticket-main::after {
+    display: none;
+  }
+
+  .coupon-ticket-stub {
+    justify-items: end;
+    padding: 0.65rem 1rem;
+  }
+}
+
+/* ========================================
    Audio Toggle
    ======================================== */
 .audio-toggle {

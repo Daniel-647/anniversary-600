@@ -40,6 +40,13 @@ class ScrollManager {
     // Always start with hero
     this.sectionIds = ['hero'];
 
+    if (document.getElementById('text-record-wall')) {
+      this.sectionIds.push('text-record-wall');
+    }
+    if (document.getElementById('makeup-coupon-wall')) {
+      this.sectionIds.push('makeup-coupon-wall');
+    }
+
     // Add chapter sections from data
     if (window.DataLoader && window.DataLoader.getStatus().isLoaded) {
       const chapters = window.DataLoader.getAllChapters();

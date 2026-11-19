@@ -6,10 +6,18 @@ import '../js/cursor.js';
 import '../js/scroll.js';
 import '../js/main.js';
 import './styles/upload.css';
+import { CouponModal } from './components/CouponModal';
 import { PhotoEditModal } from './components/PhotoEditModal';
 import { PhotoUploadModal } from './components/PhotoUploadModal';
 import { TextRecordModal } from './components/TextRecordModal';
+import { appendCoupon, mountMakeupCouponWall, replaceCoupon } from './components/makeupCouponWall';
 import { appendTextRecord, mountTextRecordWall, replaceTextRecord } from './components/textRecordWall';
+import {
+  createCoupon,
+  fetchCoupons,
+  getNextCouponSortOrder,
+  useCoupon,
+} from './services/couponService';
 import {
   createPhotoRecord,
   fetchAllRemotePhotos,
@@ -25,14 +33,16 @@ import {
   updateTextRecord,
 } from './services/textRecordService';
 import { isSupabaseConfigured } from './lib/supabase';
-import type { LocalPhoto, PhotoEditPayload, TextRecord, TextRecordSide, UploadModalPayload } from './types';
+import type { LocalPhoto, MakeupCoupon, PhotoEditPayload, TextRecord, TextRecordSide, UploadModalPayload } from './types';
 
 const editorPassword = import.meta.env.VITE_EDITOR_PASSWORD as string | undefined;
 const uploadableChapters = new Set(['growing-clear', 'nanjing', 'announcement', 'good-times-1', 'good-times-2', 'now']);
 const modal = new PhotoUploadModal();
 const photoEditModal = new PhotoEditModal();
 const recordModal = new TextRecordModal();
+const couponModal = new CouponModal();
 let textRecords: TextRecord[] = [];
+let makeupCoupons: MakeupCoupon[] = [];
 
 function notify(message: string, tone: 'success' | 'error' | 'info' = 'info'): void {
   const existing = document.querySelector('.site-toast');
@@ -159,6 +169,7 @@ function askEditorPassword(): Promise<boolean> {
 function rerenderPage(): void {
   window.Renderer?.renderAll();
   mountTextRecordWall(textRecords);
+  mountMakeupCouponWall(makeupCoupons);
   window.reinitAnniversaryAnimations?.();
   window.initBentoCardEffects?.();
   window.scrollManager?.buildSectionIds?.();
@@ -321,6 +332,68 @@ async function loadRemotePhotos(): Promise<void> {
   }
 }
 
+async function handleCreateCoupon(side: TextRecordSide, payload: { title: string; description: string }): Promise<void> {
+  const sortOrder = await getNextCouponSortOrder(side);
+  const coupon = await createCoupon({
+    side,
+    title: payload.title,
+    description: payload.description,
+    sortOrder,
+  });
+
+  makeupCoupons = makeupCoupons.concat(coupon);
+  appendCoupon(coupon, makeupCoupons);
+  notify('和好券已放进券盒', 'success');
+}
+
+async function handleUseCoupon(couponId: string, usedNote: string): Promise<void> {
+  const updated = await useCoupon({
+    id: couponId,
+    usedAt: formatCurrentRecordHour(),
+    usedNote,
+  });
+
+  makeupCoupons = makeupCoupons.map((item) => (item.id === updated.id ? updated : item));
+  replaceCoupon(updated, makeupCoupons);
+  notify('和好券已核销，记得抱抱彼此', 'success');
+}
+
+function bindCouponEntrypoints(): void {
+  document.body.addEventListener('click', async (event) => {
+    const target = event.target as HTMLElement;
+    const addButton = target.closest<HTMLElement>('[data-add-coupon]');
+    const useButton = target.closest<HTMLElement>('[data-use-coupon]');
+
+    if (!addButton && !useButton) return;
+
+    if (!(await askEditorPassword())) return;
+    if (!isSupabaseConfigured) {
+      notify('Supabase 尚未配置，和好券暂时不能保存。', 'error');
+      return;
+    }
+
+    if (addButton) {
+      const side = addButton.dataset.addCoupon as TextRecordSide | undefined;
+      if (side !== 'left' && side !== 'right') return;
+      couponModal.openCreate(side, (payload) => handleCreateCoupon(side, payload));
+      return;
+    }
+
+    const couponId = useButton?.dataset.useCoupon;
+    const coupon = makeupCoupons.find((item) => item.id === couponId);
+    if (!coupon) {
+      notify('没有找到这张和好券，请刷新后再试。', 'error');
+      return;
+    }
+    if (coupon.status === 'used') {
+      notify('这张和好券已经使用过了。', 'info');
+      return;
+    }
+
+    couponModal.openUse(coupon, (usedNote) => handleUseCoupon(coupon.id, usedNote));
+  });
+}
+
 async function loadTextRecords(): Promise<void> {
   try {
     textRecords = await fetchTextRecords();
@@ -335,6 +408,20 @@ async function loadTextRecords(): Promise<void> {
   }
 }
 
+async function loadCoupons(): Promise<void> {
+  try {
+    makeupCoupons = await fetchCoupons();
+    mountMakeupCouponWall(makeupCoupons);
+    window.reinitAnniversaryAnimations?.();
+    window.scrollManager?.buildSectionIds?.();
+  } catch (error) {
+    makeupCoupons = [];
+    mountMakeupCouponWall([]);
+    const message = error instanceof Error ? error.message : '和好券加载失败。';
+    notify(`${message} 页面其他内容已保留。`, 'error');
+  }
+}
+
 async function bootRemoteLayer(): Promise<void> {
   if (editorPassword && sessionStorage.getItem('site_authenticated') !== 'true') {
     await requireSitePassword();
@@ -343,6 +430,7 @@ async function bootRemoteLayer(): Promise<void> {
   bindUploadEntrypoints();
   bindTextRecordEntrypoints();
   bindEditEntrypoints();
+  bindCouponEntrypoints();
 
   if (!isSupabaseConfigured) {
     notify('Supabase 环境变量未配置，上传功能暂不可用。', 'info');
@@ -351,12 +439,14 @@ async function bootRemoteLayer(): Promise<void> {
   if (window.DataLoader?.getStatus().isLoaded) {
     void loadRemotePhotos();
     void loadTextRecords();
+    void loadCoupons();
     return;
   }
 
   window.DataLoader?.onReady(() => {
     void loadRemotePhotos();
     void loadTextRecords();
+    void loadCoupons();
   });
 }
 

@@ -445,6 +445,89 @@
   box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
 }
 
+.coupon-create-fields,
+.coupon-use-fields {
+  display: grid;
+  gap: 1rem;
+}
+
+.coupon-create-fields[hidden],
+.coupon-use-fields[hidden] {
+  display: none;
+}
+
+.coupon-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.coupon-preset-chip {
+  border: 1px solid rgba(201, 169, 110, 0.28);
+  border-radius: 999px;
+  background: rgba(201, 169, 110, 0.08);
+  color: var(--warm-gold-light);
+  padding: 0.4rem 0.78rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.coupon-preset-chip:hover {
+  transform: translateY(-1px);
+  background: rgba(201, 169, 110, 0.18);
+  border-color: rgba(201, 169, 110, 0.5);
+}
+
+.coupon-modal input[type="text"] {
+  width: 100%;
+  border: 1px solid rgba(232, 228, 225, 0.12);
+  border-radius: 1rem;
+  background: rgba(6, 6, 9, 0.46);
+  color: var(--cinema-white);
+  padding: 0.9rem 1rem;
+  font: inherit;
+  outline: none;
+}
+
+.coupon-modal input[type="text"]:focus {
+  border-color: rgba(201, 169, 110, 0.5);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+}
+
+.coupon-modal textarea {
+  min-height: 110px;
+}
+
+.coupon-use-preview {
+  border: 1px dashed rgba(201, 169, 110, 0.35);
+  border-radius: 1.1rem;
+  padding: 1.1rem 1.2rem;
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.12), rgba(232, 228, 225, 0.03));
+}
+
+.coupon-use-preview-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--warm-gold);
+  margin-bottom: 0.4rem;
+}
+
+.coupon-use-preview h3 {
+  font-family: var(--font-cn);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--cinema-white);
+}
+
+.coupon-use-preview p {
+  margin-top: 0.35rem;
+  color: var(--cinema-white-dim);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
 .photo-edit-form {
   grid-template-columns: 1fr 1fr;
 }

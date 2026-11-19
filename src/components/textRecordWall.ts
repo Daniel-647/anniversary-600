@@ -14,11 +14,16 @@ const sideCopy: Record<TextRecordSide, { title: string; kicker: string; empty: s
 };
 
 export function mountTextRecordWall(records: TextRecord[]): void {
+  const hero = document.getElementById('hero');
   const ending = document.getElementById('ending');
-  if (!ending) return;
+  if (!hero && !ending) return;
 
   document.getElementById('text-record-wall')?.remove();
-  ending.insertAdjacentHTML('beforebegin', renderTextRecordWall(records));
+  if (hero) {
+    hero.insertAdjacentHTML('afterend', renderTextRecordWall(records));
+    return;
+  }
+  ending?.insertAdjacentHTML('beforebegin', renderTextRecordWall(records));
 }
 
 export function appendTextRecord(record: TextRecord): void {
